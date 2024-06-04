@@ -1,0 +1,26 @@
+############################
+# STEP 1 prepare the source
+############################
+FROM golang:1.22-alpine AS builder
+
+# Set the working directory outside $GOPATH to enable the support for modules.
+WORKDIR /src
+
+# Copy go.mod and go.sum (triggers cache invalidation)
+COPY go.mod go.sum ./
+
+# Download and install dependencies
+RUN go mod download
+
+############################
+# STEP 2 the running container
+############################
+FROM golang:1.22-alpine AS runtime
+
+COPY --from=builder /go/pkg /go/pkg
+
+# Set working directory
+WORKDIR /go/src
+
+# Start the application
+CMD ["go", "run", "cmd/app/main.go"]

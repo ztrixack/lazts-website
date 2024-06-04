@@ -1,0 +1,20 @@
+# For more information, run:
+#   $ gcloud topic gcloudignore
+
+.git
+.vscode
+.air.*
+.*ignore
+.*rc
+infra/cloudbuild.yaml
+docker-compose.*.yaml
+Dockerfile.*
+Makefile
+
+# web
+web/node_modules
+web/package.json
+web/*-lock.json
+web/*.config.js
+
+**/*_test.go

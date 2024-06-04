@@ -1,0 +1,21 @@
+networks:
+  lazts:
+
+services:
+  lazts-website:
+    build:
+      context: .
+      dockerfile: ./Dockerfile
+    container_name: lazts-website
+    restart: on-failure
+    ports:
+      - "8080:8080"
+    environment:
+      PORT: 8080
+    networks:
+      - lazts
+    logging:
+      driver: json-file
+      options:
+        max-size: "10m"
+        max-file: "10"

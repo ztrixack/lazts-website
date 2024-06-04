@@ -1,0 +1,24 @@
+############################
+# STEP 1 prepare the source
+############################
+FROM golang:1.22-alpine AS builder
+
+# Set the working directory outside $GOPATH to enable the support for modules.
+WORKDIR /src
+
+# Copy go.mod, go.sum and dependencies if exists
+COPY go.mod go.sum? vendor? ./
+
+# Install dependencies if the vendor folder is not present
+RUN if [ ! -d "vendor" ]; then go mod download; fi
+
+# Stage 2: Application runtime (uses cached dependencies)
+FROM golang:1.22-alpine AS runtime
+
+COPY --from=builder /go/pkg /go/pkg
+
+# Set working directory
+WORKDIR /src
+
+# Run tests
+CMD go test -v -run "Test.*IT" -tags=integration ./...

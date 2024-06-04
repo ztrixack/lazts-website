@@ -1,0 +1,15 @@
+networks:
+  lazts-dev:
+
+services:
+  lazts-website:
+    build:
+      context: .
+      dockerfile: ./Dockerfile.dev
+    container_name: lazts-website
+    volumes:
+      - $PWD:/go/src
+    ports:
+      - "8080:8080"
+    networks:
+      - lazts-dev

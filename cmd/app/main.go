@@ -2,6 +2,8 @@ package main
 
 import (
 	"os"
+	"os/signal"
+	"syscall"
 	"time"
 
 	"github.com/rs/zerolog"
@@ -15,4 +17,18 @@ func main() {
 
 	// Log a message
 	log.Info().Msg("Hello, World!")
+
+	go func() {
+		log.Info().Msg("Starting application")
+	}()
+
+	// Channel to listen for interrupt or terminate signals
+	sig := make(chan os.Signal, 1)
+	signal.Notify(sig, os.Interrupt, syscall.SIGTERM)
+	defer signal.Stop(sig)
+
+	// Block until a signal is received.
+	<-sig
+
+	log.Info().Msg("Shutting down application...")
 }

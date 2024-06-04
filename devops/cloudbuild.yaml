@@ -1,0 +1,31 @@
+steps:
+  - name: 'gcr.io/cloud-builders/docker'
+    args:
+      - 'build'
+      - '--tag=gcr.io/$PROJECT_ID/lazts'
+      - '--file=./Dockerfile'
+      - '.'
+    env:
+      - 'TARGETARCH=amd64'
+
+  - name: 'gcr.io/cloud-builders/docker'
+    args:
+      - 'push'
+      - 'gcr.io/$PROJECT_ID/lazts'
+
+  - name: 'gcr.io/cloud-builders/gcloud'
+    args:
+      - 'beta'
+      - 'run'
+      - 'deploy'
+      - 'lazts'
+      - '--image=gcr.io/$PROJECT_ID/lazts'
+      - '--region=asia-southeast1'
+      - '--platform=managed'
+      - '--quiet'
+
+images:
+  - 'gcr.io/$PROJECT_ID/lazts'
+
+options:
+  logging: CLOUD_LOGGING_ONLY

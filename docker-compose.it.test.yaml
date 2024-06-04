@@ -1,0 +1,13 @@
+networks:
+  lazts-it:
+
+services:
+  it-tests:
+    build:
+      context: .
+      dockerfile: ./Dockerfile.it
+    container_name: it-tests
+    volumes:
+      - $PWD:/src
+    networks:
+      - lazts-it
