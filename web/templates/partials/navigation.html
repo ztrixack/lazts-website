@@ -1,0 +1,58 @@
+{{define "navigation"}}
+<div class="flex h-14 w-full items-center justify-between bg-zinc-900/75 px-4">
+  <div class="flex flex-col items-center justify-center text-white md:hidden">
+    <div id="menu-button" class="group flex cursor-pointer flex-col items-center justify-center">
+      <span
+        class="mx-auto my-0.5 inline-block h-[4px] w-6 rounded-sm bg-white"
+        style="transition: all 300ms cubic-bezier(0.175, 0.885, 0.32, 1.275)"
+      >
+      </span>
+      <span
+        class="mx-auto my-0.5 inline-block h-[4px] w-4 rounded-sm bg-white group-hover:w-6"
+        style="transition: all 300ms cubic-bezier(0.175, 0.885, 0.32, 1.275)"
+      >
+      </span>
+      <span
+        class="mx-auto my-0.5 inline-block h-[4px] w-2 rounded-sm bg-white group-hover:w-6"
+        style="transition: all 300ms cubic-bezier(0.175, 0.885, 0.32, 1.275)"
+      >
+      </span>
+    </div>
+  </div>
+
+  <div id="brand-logo" class="block">
+    <a href="/" class="block h-8 w-8 rounded-full border border-zinc-500 p-1">
+      <img
+        src="/static/icons/brand-dark-32x32.webp"
+        alt="brand-logo"
+        class="block h-full w-full object-contain dark:hidden"
+        loading="lazy"
+      />
+      <img
+        src="/static/icons/brand-light-32x32.webp"
+        alt="brand-logo"
+        class="hidden h-full w-full object-contain dark:block"
+        loading="lazy"
+      />
+    </a>
+  </div>
+
+  <nav
+    id="menu-container"
+    class="flex-nowrap max-md:absolute max-md:left-0 max-md:top-14 max-md:h-screen max-md:w-full max-md:bg-zinc-800/95 md:block"
+    hidden
+  >
+    <ul class="flex justify-between max-md:flex-col">
+      {{ range .Menu }}
+      <li class="m-2 rounded text-white hover:bg-zinc-300 hover:text-orange-700" data-path="{{.Path}}">
+        <a href="{{.Path}}" class="flex items-center justify-between p-1 text-sm">
+          <span>{{.Label}}</span>
+        </a>
+      </li>
+      {{ end }}
+    </ul>
+  </nav>
+
+  {{ template "theme-toggle" .}}
+</div>
+{{end}}

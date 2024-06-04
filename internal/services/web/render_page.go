@@ -9,7 +9,7 @@ import (
 	"github.com/rs/zerolog/log"
 )
 
-func (m *service) RenderPage(w io.Writer, name string) error {
+func (m *service) RenderPage(w io.Writer, name string, data map[string]interface{}) error {
 	log.Debug().Str("page", name).Msg("page rendering")
 
 	tmpl, err := m.templates.Clone()
@@ -28,5 +28,7 @@ func (m *service) RenderPage(w io.Writer, name string) error {
 		return ErrParseContent
 	}
 
-	return tmpl.ExecuteTemplate(w, "base", m.config)
+	log.Debug().Str("page", name).Interface("data", data).Msg("rendering page")
+
+	return tmpl.ExecuteTemplate(w, "base", m.injectData(data))
 }

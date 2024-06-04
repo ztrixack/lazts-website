@@ -3,9 +3,12 @@ package main
 import (
 	"context"
 	"lazts/internal/handlers/api"
+	"lazts/internal/handlers/file"
 	"lazts/internal/modules/http"
 	"lazts/internal/modules/http/middlewares"
+	"lazts/internal/modules/imaging"
 	"lazts/internal/modules/markdown"
+	"lazts/internal/services/watermark"
 	"lazts/internal/services/web"
 	"os"
 	"os/signal"
@@ -21,13 +24,14 @@ func main() {
 	zerolog.TimeFieldFormat = time.RFC3339
 	log.Logger = log.Output(zerolog.ConsoleWriter{Out: os.Stdout})
 
-	markdown := markdown.New()
 	server := http.New()
 	server.Use(middlewares.Logging)
 
-	web := web.New(markdown)
+	markdown := markdown.New()
+	imaging := imaging.New()
 
-	api.New(server, web)
+	file.New(server, watermark.New(imaging))
+	api.New(server, web.New(markdown))
 
 	go func() {
 		log.Info().Msgf("starting server on port %s", server.Address)

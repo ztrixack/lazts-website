@@ -1,0 +1,15 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+body {
+  font-family: 'Kanit', 'sans-serif';
+}
+
+main {
+  transition: opacity 0.5s ease-in-out;
+}
+
+.katex-html {
+  display: none;
+}

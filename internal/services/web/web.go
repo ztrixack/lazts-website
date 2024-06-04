@@ -6,13 +6,14 @@ import (
 	"lazts/internal/utils"
 	"path/filepath"
 	"text/template"
+	"time"
 
 	"github.com/rs/zerolog/log"
 )
 
 type Servicer interface {
-	RenderPage(w io.Writer, path string) error
-	RenderMarkdown(w io.Writer, path string) error
+	RenderPage(w io.Writer, path string, data map[string]interface{}) error
+	RenderMarkdown(w io.Writer, path string, data map[string]interface{}) error
 }
 
 type service struct {
@@ -23,7 +24,7 @@ type service struct {
 
 var _ Servicer = (*service)(nil)
 
-func New(m markdown.Moduler) Servicer {
+func New(m markdown.Moduler) *service {
 	c := parseConfig()
 	t := parseTemplates(c.Dir)
 	return &service{c, t, m}
@@ -41,4 +42,15 @@ func parseTemplates(path string) *template.Template {
 	}
 
 	return tmpl
+}
+
+func (m *service) injectData(data map[string]interface{}) map[string]interface{} {
+	if data == nil {
+		data = make(map[string]interface{})
+	}
+
+	data["Title"] = m.config.Title
+	data["Excerpt"] = m.config.Excerpt
+	data["Year"] = time.Now().Year()
+	return data
 }

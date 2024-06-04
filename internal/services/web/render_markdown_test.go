@@ -25,7 +25,7 @@ func TestWeb_RenderMarkdown(t *testing.T) {
 	utils.CreateTestFile(t, filepath.Join(testDir, "templates", "layouts"), "base.html", `{{define "base"}}<html><head><title>{{.Title}}</title></head><body>{{template "content" .}}</body></html>{{end}}`)
 	utils.CreateTestFile(t, filepath.Join(testDir, "templates", "pages"), "blog_content.html", `<h2>Blog</h2><article>{{template "markdown" .}}</article>`)
 
-	r := New(markdownMock).(*service)
+	r := New(markdownMock)
 
 	tests := []struct {
 		name      string
@@ -82,7 +82,7 @@ func TestWeb_RenderMarkdown(t *testing.T) {
 		t.Run(tt.name, func(t *testing.T) {
 			var buf bytes.Buffer
 			tt.setup()
-			err := r.RenderMarkdown(&buf, tt.path)
+			err := r.RenderMarkdown(&buf, tt.path, nil)
 			if tt.expectErr {
 				assert.Error(t, err, "expected an error but got none")
 			} else {

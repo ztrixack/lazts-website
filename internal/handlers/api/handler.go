@@ -15,6 +15,5 @@ func New(m http.Moduler, ws web.Servicer) {
 }
 
 func (h *handler) setRouter(m http.Moduler) {
-	// page
 	m.Get("/", h.Home)
 }

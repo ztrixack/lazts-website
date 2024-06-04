@@ -1,0 +1,19 @@
+{{define "blackhole"}}
+<div class="flex min-h-screen w-full items-center justify-center">
+  <div class="absolute z-40 flex flex-col items-center justify-center">
+    <span class="text-xs font-light uppercase text-slate-600 dark:text-slate-400">{{.Since}}</span>
+    <h1 class="text-5xl font-semibold uppercase tracking-wider text-slate-800 dark:text-slate-200">{{.Title}}</h1>
+    <h2 class="font-light uppercase text-slate-600 dark:text-slate-400">{{.Excerpt}}</h2>
+  </div>
+  <div class="flex min-h-screen w-full items-center justify-center">
+    {{range .Blackhole}}
+    <span class="absolute animate-blackhole" style="height: {{.Size}}px; weight: {{.Size}}px; rotate: {{.Rotate}}deg">
+      <span
+        class="absolute h-px rounded-full bg-gradient-to-r from-white to-zinc-900 dark:bg-gradient-to-l"
+        style="opacity: {{.Opacity}}%; width: {{.Width}}px"
+      ></span>
+    </span>
+    {{end}}
+  </div>
+</div>
+{{end}}

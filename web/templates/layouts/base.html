@@ -4,12 +4,14 @@
 <head>
     {{template "head" .}}
 </head>
-<body>
+<body class="bg-zinc-100 transition-color duration-300 dark:bg-zinc-900">
     {{template "header" .}}
-    <main>
+    <main id="content">
         {{template "content" .}}
     </main>
     {{template "footer" .}}
+
+    {{template "script" .}}
 </body>
 </html>
 {{end}}

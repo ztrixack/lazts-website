@@ -26,3 +26,16 @@ func LookupNumericEnv(key string, _default string) string {
 
 	return ret
 }
+
+func LookupUIntEnv(key string, _default uint) uint {
+	ret, ok := os.LookupEnv(key)
+	if !ok || ret == "" {
+		return _default
+	}
+
+	if s, _ := strconv.Atoi(ret); s > 0 {
+		return (uint)(s)
+	}
+
+	return _default
+}

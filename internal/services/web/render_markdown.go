@@ -9,7 +9,7 @@ import (
 	"github.com/rs/zerolog/log"
 )
 
-func (m *service) RenderMarkdown(w io.Writer, path string) error {
+func (m *service) RenderMarkdown(w io.Writer, path string, data map[string]interface{}) error {
 	log.Debug().Str("path", path).Msg("markdown rendering")
 
 	tmpl, err := m.templates.Clone()
@@ -41,5 +41,5 @@ func (m *service) RenderMarkdown(w io.Writer, path string) error {
 		return ErrParseContent
 	}
 
-	return tmpl.ExecuteTemplate(w, "base", m.config)
+	return tmpl.ExecuteTemplate(w, "base", m.injectData(data))
 }

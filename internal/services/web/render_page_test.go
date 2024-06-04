@@ -23,7 +23,7 @@ func TestWeb_RenderPage(t *testing.T) {
 	utils.CreateTestFile(t, filepath.Join(testDir, "templates", "pages"), "home.html", `<h2>Home</h2><p>This is the home page.</p>`)
 	utils.CreateTestFile(t, filepath.Join(testDir, "templates", "pages"), "blog.html", `<h2>Blog</h2><p>This is the blog page.</p>`)
 
-	r := New(nil).(*service)
+	r := New(nil)
 
 	tests := []struct {
 		name      string
@@ -58,7 +58,7 @@ func TestWeb_RenderPage(t *testing.T) {
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
 			var buf bytes.Buffer
-			err := r.RenderPage(&buf, tt.path)
+			err := r.RenderPage(&buf, tt.path, nil)
 			if tt.expectErr {
 				assert.Error(t, err, "expected an error but got none")
 			} else {

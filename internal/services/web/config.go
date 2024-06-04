@@ -7,7 +7,7 @@ import (
 const (
 	DEFAULT_DIR     = "./web"
 	DEFAULT_TITLE   = "lazts"
-	DEFAULT_EXCERPT = "no excerpt"
+	DEFAULT_EXCERPT = "The event horizon of my knowledge"
 )
 
 type config struct {

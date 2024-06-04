@@ -1,9 +1,5 @@
 {{define "header"}}
-<header>
-  <nav>
-      <a href="/">Home</a>
-      <a href="/memo">Memo</a>
-      <a href="/about">About</a>
-  </nav>
+<header class="fixed left-0 top-0 z-40 h-14 w-full transition-transform duration-300" id="header">
+  {{template "navigation" .}}
 </header>
 {{end}}

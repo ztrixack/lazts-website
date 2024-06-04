@@ -12,12 +12,12 @@ type Mock struct {
 
 var _ Servicer = (*Mock)(nil)
 
-func (m *Mock) RenderMarkdown(w io.Writer, path string) error {
-	ret := m.Called(w, path)
+func (m *Mock) RenderMarkdown(w io.Writer, path string, data map[string]interface{}) error {
+	ret := m.Called(w, path, data)
 	return ret.Error(0)
 }
 
-func (m *Mock) RenderPage(w io.Writer, path string) error {
-	ret := m.Called(w, path)
+func (m *Mock) RenderPage(w io.Writer, path string, data map[string]interface{}) error {
+	ret := m.Called(w, path, data)
 	return ret.Error(0)
 }
