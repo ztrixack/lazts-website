@@ -2,6 +2,7 @@ package web
 
 import (
 	"io"
+	"lazts/internal/modules/markdown"
 	"lazts/internal/utils"
 	"path/filepath"
 	"text/template"
@@ -9,20 +10,23 @@ import (
 	"github.com/rs/zerolog/log"
 )
 
-type Webber interface {
+type Servicer interface {
 	RenderPage(w io.Writer, path string) error
 	RenderMarkdown(w io.Writer, path string) error
 }
 
-type webber struct {
+type service struct {
 	config    *config
 	templates *template.Template
+	markdown  markdown.Moduler
 }
 
-func New() Webber {
+var _ Servicer = (*service)(nil)
+
+func New(m markdown.Moduler) Servicer {
 	c := parseConfig()
 	t := parseTemplates(c.Dir)
-	return &webber{c, t}
+	return &service{c, t, m}
 }
 
 func parseTemplates(path string) *template.Template {

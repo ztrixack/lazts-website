@@ -2,6 +2,7 @@ package web
 
 import (
 	"bytes"
+	"lazts/internal/utils"
 	"os"
 	"path/filepath"
 	"testing"
@@ -16,13 +17,13 @@ func TestWeb_RenderPage(t *testing.T) {
 	os.Setenv("WEB_TITLE", testTitle)
 	defer os.Unsetenv("WEB_DIR")
 	defer os.Unsetenv("WEB_TITLE")
-	defer removeTestDir(t, testDir)
+	defer utils.RemoveTestDir(t, testDir)
 
-	createTestFile(t, filepath.Join(testDir, "templates", "layouts"), "base.html", `{{define "base"}}<html><head><title>{{.Title}}</title></head><body>{{template "content" .}}</body></html>{{end}}`)
-	createTestFile(t, filepath.Join(testDir, "templates", "pages"), "home.html", `<h2>Home</h2><p>This is the home page.</p>`)
-	createTestFile(t, filepath.Join(testDir, "templates", "pages"), "blog.html", `<h2>Blog</h2><p>This is the blog page.</p>`)
+	utils.CreateTestFile(t, filepath.Join(testDir, "templates", "layouts"), "base.html", `{{define "base"}}<html><head><title>{{.Title}}</title></head><body>{{template "content" .}}</body></html>{{end}}`)
+	utils.CreateTestFile(t, filepath.Join(testDir, "templates", "pages"), "home.html", `<h2>Home</h2><p>This is the home page.</p>`)
+	utils.CreateTestFile(t, filepath.Join(testDir, "templates", "pages"), "blog.html", `<h2>Blog</h2><p>This is the blog page.</p>`)
 
-	r := New().(*webber)
+	r := New(nil).(*service)
 
 	tests := []struct {
 		name      string
@@ -67,26 +68,5 @@ func TestWeb_RenderPage(t *testing.T) {
 
 			assert.Equal(t, tt.want, buf.String(), "unexpected output from rendering")
 		})
-	}
-}
-
-func createTestFile(t *testing.T, dir, name, content string) {
-	t.Helper()
-	filePath := filepath.Join(dir, name)
-	err := os.MkdirAll(filepath.Dir(filePath), 0755)
-	if err != nil {
-		t.Fatalf("Failed to create test directory: %v", err)
-	}
-	err = os.WriteFile(filePath, []byte(content), 0644)
-	if err != nil {
-		t.Fatalf("Failed to create test file: %v", err)
-	}
-}
-
-func removeTestDir(t *testing.T, dir string) {
-	t.Helper()
-	err := os.RemoveAll(dir)
-	if err != nil {
-		t.Fatalf("Failed to remove test directory: %v", err)
 	}
 }

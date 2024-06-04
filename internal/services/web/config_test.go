@@ -9,16 +9,16 @@ import (
 
 func TestParseConfig(t *testing.T) {
 	tests := []struct {
-		name             string
-		setup            func()
-		teardown         func()
-		expectedWebDir   string
-		expectedWebTitle string
+		name          string
+		setup         func()
+		teardown      func()
+		expectedDir   string
+		expectedTitle string
 	}{
 		{
-			name:             "WEB_DIR environment variable set",
-			expectedWebDir:   "/custom_web",
-			expectedWebTitle: "test",
+			name:          "environment variable set",
+			expectedDir:   "/custom_web",
+			expectedTitle: "test",
 			setup: func() {
 				os.Setenv("WEB_DIR", "/custom_web")
 				os.Setenv("WEB_TITLE", "test")
@@ -29,9 +29,9 @@ func TestParseConfig(t *testing.T) {
 			},
 		},
 		{
-			name:             "environment variable not set",
-			expectedWebDir:   "/web",
-			expectedWebTitle: "lazts",
+			name:          "environment variable not set",
+			expectedDir:   "/web",
+			expectedTitle: "lazts",
 			setup: func() {
 				os.Unsetenv("WEB_DIR")
 				os.Unsetenv("WEB_TITLE")
@@ -47,8 +47,8 @@ func TestParseConfig(t *testing.T) {
 
 			cfg := parseConfig()
 
-			assert.Equal(t, tt.expectedWebDir, cfg.Dir, "WebDir should be equal")
-			assert.Equal(t, tt.expectedWebTitle, cfg.Title, "WebTitle should be equal")
+			assert.Equal(t, tt.expectedDir, cfg.Dir, "WebDir should be equal")
+			assert.Equal(t, tt.expectedTitle, cfg.Title, "WebTitle should be equal")
 		})
 	}
 }

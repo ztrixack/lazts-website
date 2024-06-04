@@ -9,7 +9,7 @@ import (
 	"github.com/rs/zerolog/log"
 )
 
-func (m *webber) RenderPage(w io.Writer, path string) error {
+func (m *service) RenderPage(w io.Writer, path string) error {
 	log.Debug().Str("path", path).Msg("page rendering")
 
 	tmpl, err := m.templates.Clone()

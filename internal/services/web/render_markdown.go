@@ -6,11 +6,10 @@ import (
 	"path/filepath"
 	"strings"
 
-	"github.com/gomarkdown/markdown"
 	"github.com/rs/zerolog/log"
 )
 
-func (m *webber) RenderMarkdown(w io.Writer, path string) error {
+func (m *service) RenderMarkdown(w io.Writer, path string) error {
 	log.Debug().Str("path", path).Msg("markdown rendering")
 
 	tmpl, err := m.templates.Clone()
@@ -32,13 +31,11 @@ func (m *webber) RenderMarkdown(w io.Writer, path string) error {
 		return ErrParseContent
 	}
 
-	content, err := os.ReadFile(filepath.Join(m.config.Dir, "contents", path, "page.md"))
+	htmlContent, err := m.markdown.ToHTML(filepath.Join(m.config.Dir, "contents", path, "page.md"))
 	if err != nil {
-		log.Error().Err(err).Msg("failed to read file")
-		return ErrNotFound
+		log.Error().Err(err).Msg("failed to convert markdown to html")
+		return ErrConvertMarkdown
 	}
-
-	htmlContent := strings.TrimSpace(string(markdown.ToHTML(content, nil, nil)))
 	if _, err := tmpl.New("markdown").Parse(htmlContent); err != nil {
 		log.Error().Err(err).Msg("failed to parse content")
 		return ErrParseContent
