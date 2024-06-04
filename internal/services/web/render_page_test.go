@@ -33,24 +33,23 @@ func TestWeb_RenderPage(t *testing.T) {
 	}{
 		{
 			name:      "Render template",
-			path:      "/blog",
-			want:      `<html><head><title>test_title</title></head><body><h2>Blog</h2><p>This is the blog page.</p></body></html>`,
-			expectErr: false,
-		},
-		{
-			name:      "Render template without /",
 			path:      "blog",
 			want:      `<html><head><title>test_title</title></head><body><h2>Blog</h2><p>This is the blog page.</p></body></html>`,
 			expectErr: false,
 		},
 		{
 			name:      "Render home template",
-			path:      "/",
+			path:      "home",
 			want:      `<html><head><title>test_title</title></head><body><h2>Home</h2><p>This is the home page.</p></body></html>`,
 			expectErr: false,
 		},
 		{
-			name:      "Render not found template",
+			name:      "No render with empty template",
+			path:      "",
+			expectErr: true,
+		},
+		{
+			name:      "No render not found template",
 			path:      "nonexist",
 			expectErr: true,
 		},

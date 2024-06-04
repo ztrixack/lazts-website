@@ -10,7 +10,7 @@ import (
 
 func TestToHTML(t *testing.T) {
 	testDir := "test_data"
-	m := New().(*module)
+	m := New()
 
 	utils.CreateTestFile(t, testDir, "test.md", "# Hello, World!\n\nThis is a test.")
 	defer utils.RemoveTestDir(t, testDir)

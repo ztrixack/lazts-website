@@ -1,16 +1,16 @@
 package web
 
 import (
+	"fmt"
 	"io"
 	"os"
 	"path/filepath"
-	"strings"
 
 	"github.com/rs/zerolog/log"
 )
 
-func (m *service) RenderPage(w io.Writer, path string) error {
-	log.Debug().Str("path", path).Msg("page rendering")
+func (m *service) RenderPage(w io.Writer, name string) error {
+	log.Debug().Str("page", name).Msg("page rendering")
 
 	tmpl, err := m.templates.Clone()
 	if err != nil {
@@ -18,12 +18,7 @@ func (m *service) RenderPage(w io.Writer, path string) error {
 		return ErrCloneTemplates
 	}
 
-	filename := strings.TrimPrefix(path, "/") + ".html"
-	if path == "/" {
-		filename = "home.html"
-	}
-
-	page, err := os.ReadFile(filepath.Join(m.config.Dir, "templates/pages", filename))
+	page, err := os.ReadFile(filepath.Join(m.config.Dir, "templates/pages", fmt.Sprintf("%s.html", name)))
 	if err != nil {
 		log.Error().Err(err).Msg("failed to read file")
 		return ErrNotFound

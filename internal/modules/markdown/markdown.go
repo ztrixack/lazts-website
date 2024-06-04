@@ -18,7 +18,7 @@ type module struct {
 
 var _ Moduler = (*module)(nil)
 
-func New() Moduler {
+func New() *module {
 	return &module{
 		config: parseConfig(),
 		cache:  make(map[string]string),
