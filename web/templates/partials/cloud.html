@@ -1,0 +1,15 @@
+{{define "cloud"}}
+<div class="flex min-h-screen items-center justify-center">
+  <div
+    class="h-48 w-full overflow-x-clip overflow-y-visible bg-gradient-to-b from-zinc-100 via-zinc-300 to-zinc-200 blur-lg dark:from-zinc-900 dark:via-zinc-700 dark:to-zinc-800"
+  >
+    {{range .Cloud}}
+    <span
+      class="absolute h-24 w-2 rounded-full bg-zinc-900 opacity-25 blur-lg dark:bg-white"
+      style="top: {{.Top}}%; left: {{.Left}}%; transform: rotate({{.Rotate}}deg)"
+    >
+    </span>
+    {{end}}
+  </div>
+</div>
+{{end}}
