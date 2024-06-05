@@ -72,7 +72,7 @@ func TestUpdateFeaturedImagePaths(t *testing.T) {
 
 	for _, tc := range testcases {
 		t.Run(tc.name, func(t *testing.T) {
-			result := UpdateFeaturedImagePaths(tc.path, "/new/path")
+			result := UpdateFeaturedImagePaths("/new/path", tc.path)
 			assert.Equal(t, tc.expected, result, "output should match expected")
 		})
 	}

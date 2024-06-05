@@ -3,6 +3,7 @@ package utils
 import (
 	"bytes"
 	"fmt"
+	"net/url"
 	"path/filepath"
 	"regexp"
 	"strings"
@@ -31,9 +32,14 @@ func UpdateImagePaths(markdownData []byte, prefixPath string) []byte {
 	return re.ReplaceAllFunc(markdownData, replaceFunc)
 }
 
-func UpdateFeaturedImagePaths(path string, newPath string) string {
+func UpdateFeaturedImagePaths(base string, path string) string {
 	if !strings.HasPrefix(path, "http://") && !strings.HasPrefix(path, "https://") {
-		return filepath.Join(newPath, path)
+		urlpath, err := url.JoinPath(base, path)
+		if err != nil {
+			return path
+		}
+
+		return urlpath
 	}
 
 	return path

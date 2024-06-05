@@ -32,7 +32,7 @@ func TestToHTML(t *testing.T) {
 			name: "cache hit",
 			path: "test.md",
 			setup: func() {
-				m.cache["test.md"] = "<p>Cached content</p>"
+				m.cache["html_test.md"] = "<p>Cached content</p>"
 			},
 			expectedContent: "<p>Cached content</p>",
 		},

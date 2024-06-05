@@ -1,0 +1,56 @@
+{{define "vacation-hero"}}
+<div class="relative my-80 flex flex-col justify-center space-y-8 overflow-x-clip overflow-y-visible">
+  <div class="container mx-auto max-w-5xl px-4 py-12">
+    <div class="mx-4 grid grid-cols-12 gap-4">
+      <div class="col-span-12 lg:col-span-3">
+        <div
+          class="mb-14 text-center before:mx-auto before:mb-5 before:block before:h-3 before:w-24 before:rounded-md before:bg-orange-400 before:dark:bg-orange-600 lg:text-left lg:before:mx-0"
+        >
+          <h2 class="text-3xl font-bold tracking-tight text-slate-900 dark:text-slate-100">🗺️ Next Station</h2>
+          <span class="text-lg font-light leading-loose text-slate-600 dark:text-slate-400"> โหมดท่องเที่ยว </span>
+          <div class="mx-auto mt-16 flex w-fit flex-col items-start justify-center">
+            <div class="flex flex-col p-4">
+              <img src="/static/images/thailand-map.webp" alt="thailand map" class="self-center object-cover" loading="lazy" />
+              <span class="self-end font-light tracking-wider text-slate-600 dark:text-slate-400">Thailand</span>
+            </div>
+
+            <div class="flex flex-col p-4">
+              <img src="/static/images/japan-map.webp" alt="japan map" class="self-center object-cover" loading="lazy" />
+              <span class="self-end font-light tracking-wider text-slate-600 dark:text-slate-400">Japan</span>
+            </div>
+
+            <div class="flex flex-col border px-6 py-2">
+              <div class="flex flex-row items-baseline justify-start">
+                <div class="h-2 w-2 rounded-full bg-green-500"></div>
+                <span class="mx-2 text-xs text-gray-600 dark:text-gray-400">ไปมาแล้ว</span>
+              </div>
+
+              <div class="flex flex-row items-baseline justify-start">
+                <div class="h-2 w-2 rounded-full bg-blue-500"></div>
+                <span class="mx-2 text-xs text-gray-600 dark:text-gray-400">ยังไม่เคยผ่าน</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="relative col-span-12 space-y-6 px-4 lg:col-span-9">
+        <div
+          class="relative col-span-12 space-y-12 px-4 before:bg-orange-200 before:dark:bg-orange-400 sm:col-span-8 sm:space-y-8 sm:before:absolute sm:before:-left-3 sm:before:bottom-0 sm:before:top-2 sm:before:w-0.5"
+        >
+          {{range .Vacations}} {{template "vacation-card" .}} {{end}}
+          <div class="mt-16 text-center">
+            <a
+              href="/vacations"
+              class="mt-4 inline-block w-full rounded border border-orange-500 bg-white px-8 py-3 text-orange-500 transition hover:bg-orange-400 hover:text-white"
+            >
+              ไปพักร้อนกัน 🏖️
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  {{template "vacation-star" .}}
+</div>
+{{end}}

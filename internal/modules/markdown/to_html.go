@@ -24,10 +24,11 @@ import (
 
 func (m *module) ToHTML(path string) (string, error) {
 	log.Debug().Str("path", path).Msg("converting to HTML")
+	cpach := "html_" + path
 
-	if m.cache[path] != "" {
+	if data, ok := m.cache[cpach].(string); data != "" && ok {
 		log.Debug().Str("path", path).Msg("returning cached HTML for path")
-		return m.cache[path], nil
+		return data, nil
 	}
 
 	content, err := os.ReadFile(path)
@@ -62,7 +63,8 @@ func (m *module) ToHTML(path string) (string, error) {
 	if err := markdown.Convert(content, &buf, parser.WithContext(context)); err != nil {
 		return "", err
 	}
+	result := strings.TrimSpace(buf.String())
+	m.cache[cpach] = result
 
-	m.cache[path] = strings.TrimSpace(buf.String())
-	return m.cache[path], nil
+	return result, nil
 }

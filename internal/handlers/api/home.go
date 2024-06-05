@@ -29,6 +29,13 @@ func (h *handler) Home(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	data["Vacations"], err = h.vacationer.Get("japan")
+	if err != nil {
+		log.Error().Err(err).Msg("failed to get vacations")
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+
 	if err := h.webber.RenderPage(w, "home", data); err != nil {
 		log.Error().Err(err).Msg("failed to render page")
 	}

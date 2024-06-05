@@ -1,0 +1,29 @@
+{{define "vacation-star"}}
+<div
+id="sun"
+class="absolute -left-[640px] -top-[640px] -z-50 h-[640px] w-[640px] rounded-[50%] bg-orange-500 md:-left-[560px] lg:-left-[480px]"
+style="
+  box-shadow:
+    0 0 10px orange,
+    0 0 60px orange,
+    0 0 200px yellow,
+    inset 0 0 80px yellow;
+  filter: blur(2px);
+"
+>
+</div>
+
+<div
+id="moon"
+class="absolute -right-[120px] top-2/4 -z-50 h-[120px] w-[120px] rounded-[50%] bg-zinc-500 dark:bg-white md:-right-[90px] xl:-right-[60px]"
+style="
+  box-shadow:
+    0 0 10px slategray,
+    0 0 60px slategray,
+    0 0 200px whitesmoke,
+    inset 0 0 80px slategray;
+  filter: blur(1px);
+"
+>
+</div>
+{{end}}
