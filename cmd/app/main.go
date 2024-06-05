@@ -9,6 +9,7 @@ import (
 	"lazts/internal/modules/imaging"
 	"lazts/internal/modules/markdown"
 	"lazts/internal/services/book"
+	"lazts/internal/services/memo"
 	"lazts/internal/services/vacation"
 	"lazts/internal/services/watermark"
 	"lazts/internal/services/web"
@@ -33,7 +34,7 @@ func main() {
 	markdown := markdown.New()
 
 	file.New(server, watermark.New(imaging))
-	api.New(server, web.New(markdown), book.New(), vacation.New(markdown))
+	api.New(server, web.New(markdown), book.New(), vacation.New(markdown), memo.New(markdown))
 
 	go func() {
 		log.Info().Msgf("starting server on port %s", server.Address)

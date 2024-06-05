@@ -9,7 +9,7 @@ import (
 	"strings"
 )
 
-func (s *service) List() ([]models.Book, error) {
+func (s *service) Get() ([]models.Book, error) {
 	if len(s.cache) != 0 {
 		return s.cache, nil
 	}

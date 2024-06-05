@@ -57,8 +57,12 @@ func ToDayMonth(t time.Time) string {
 	return fmt.Sprintf("%02d %s", t.Day(), englishShortMonths[t.Month()])
 }
 
+func ToYearMonthDay(t time.Time) string {
+	return fmt.Sprintf("%02d %s %04d", t.Day(), thaiMonths[t.Month()], t.Year())
+}
+
 func ToYearMonthDayRange(from, to time.Time) string {
-	if from.Format("2016-01-02") == to.Format("2016-01-02") {
+	if from.Format("2006-01-02") == to.Format("2006-01-02") {
 		return fmt.Sprintf("%sที่ %d %s %d", thaiWeekdays[from.Weekday()], from.Day(), thaiMonths[from.Month()], from.Year())
 	}
 

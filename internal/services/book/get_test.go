@@ -9,7 +9,7 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
-func TestList(t *testing.T) {
+func TestGet(t *testing.T) {
 	content := `[{
 		"title": "title",
 		"subtitle": "subtitle",
@@ -88,7 +88,7 @@ func TestList(t *testing.T) {
 
 			s := New()
 
-			books, err := s.List()
+			books, err := s.Get()
 
 			if tt.expectedError {
 				assert.Error(t, err, "Expected an error")

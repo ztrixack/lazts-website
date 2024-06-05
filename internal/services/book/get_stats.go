@@ -5,7 +5,7 @@ import (
 )
 
 func (s *service) GetStats() (*models.BookStats, error) {
-	books, err := s.List()
+	books, err := s.Get()
 	if err != nil {
 		return nil, err
 	}

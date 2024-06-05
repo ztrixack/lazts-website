@@ -6,7 +6,7 @@ import (
 )
 
 func (s *service) GetShelf(rows ...int) ([][]models.Book, error) {
-	books, err := s.List()
+	books, err := s.Get()
 	if err != nil {
 		return nil, err
 	}

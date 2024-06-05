@@ -47,7 +47,7 @@ func (v VacationMetadata) ToHTML() Vacation {
 		Location:         utils.ToFlagEmoji(v.Location),
 		DateTimeISO:      from.Format(time.RFC3339),
 		DateTimeReadable: utils.ToYearMonthDayRange(from, to),
-		FeaturedImage:    utils.UpdateFeaturedImagePaths(filepath.Join("/static/vacations", v.Slug), v.FeaturedImage),
-		Link:             filepath.Join("/", "vacations", v.Slug),
+		FeaturedImage:    utils.UpdateFeaturedImagePaths(filepath.Join("/static/contents/vacations", v.Slug), v.FeaturedImage),
+		Link:             filepath.Join("/vacations", v.Slug),
 	}
 }

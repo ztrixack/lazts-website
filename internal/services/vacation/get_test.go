@@ -11,21 +11,6 @@ import (
 )
 
 func TestGet(t *testing.T) {
-	content := `
----
-title: title
-slug: 0000-slug
-excerpt: excerpt
-location: location
-date_from: 2017-01-01
-date_to: 2017-01-01
-featured_image: image
-published_at: 2017-01-01
-published: true
-last_updated_at: 2024-05-23
----
-`
-
 	tests := []struct {
 		name              string
 		contentDir        string
@@ -44,12 +29,12 @@ last_updated_at: 2024-05-23
 					"location":        "location",
 					"date_from":       "2017-01-01",
 					"date_to":         "2017-01-01",
-					"featured_image":  "image",
+					"featured_image":  "image.png",
 					"published_at":    "2017-01-01",
 					"published":       true,
 					"last_updated_at": "2024-05-23",
 				}, nil).Once()
-				utils.CreateTestFile(t, dir, "vacations/0000-slug/index.md", content)
+				utils.CreateTestFile(t, dir, "vacations/0000-slug/index.md", "some content")
 			},
 			expectedVacations: []models.Vacation{
 				{
@@ -58,7 +43,7 @@ last_updated_at: 2024-05-23
 					Location:         "location",
 					DateTimeISO:      "2017-01-01T00:00:00Z",
 					DateTimeReadable: "วันอาทิตย์ที่ 1 มกราคม 2017",
-					FeaturedImage:    "/static/vacations/0000-slug/image",
+					FeaturedImage:    "/static/contents/vacations/0000-slug/image.png",
 					Link:             "/vacations/0000-slug",
 				},
 			},

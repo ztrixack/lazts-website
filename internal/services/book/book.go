@@ -3,7 +3,7 @@ package book
 import "lazts/internal/models"
 
 type Servicer interface {
-	List() ([]models.Book, error)
+	Get() ([]models.Book, error)
 	GetStats() (*models.BookStats, error)
 	GetShelf(...int) ([][]models.Book, error)
 }

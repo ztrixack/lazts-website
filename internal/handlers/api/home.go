@@ -36,6 +36,13 @@ func (h *handler) Home(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	data["Memos"], err = h.memoizer.Get(0, 10)
+	if err != nil {
+		log.Error().Err(err).Msg("failed to get memos")
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+
 	if err := h.webber.RenderPage(w, "home", data); err != nil {
 		log.Error().Err(err).Msg("failed to render page")
 	}
@@ -45,6 +52,6 @@ var DEFAULT_MENU = []map[string]string{
 	{"Label": "Home", "Path": "/"},
 	{"Label": "Vacations", "Path": "/vacations"},
 	{"Label": "Books", "Path": "/books"},
-	{"Label": "Notes", "Path": "/notes"},
+	{"Label": "Memos", "Path": "/memos"},
 	{"Label": "About", "Path": "/about"},
 }

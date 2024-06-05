@@ -6,8 +6,7 @@ import (
 	"os"
 	"path/filepath"
 	"strings"
-
-	"github.com/rs/zerolog/log"
+	"sync"
 )
 
 func (s *service) Get(location string) ([]models.Vacation, error) {
@@ -20,25 +19,48 @@ func (s *service) Get(location string) ([]models.Vacation, error) {
 		return nil, err
 	}
 
-	vacations := make([]models.Vacation, 0)
-	for _, dir := range dirs {
-		if dir.IsDir() {
-			metadata, err := s.markdowner.ToMetadata(filepath.Join(s.config.ContentDir, "vacations", dir.Name(), "index.md"))
-			if err != nil {
-				return nil, err
-			}
+	var (
+		vacations []models.Vacation
+		wg        sync.WaitGroup
+		errChan   = make(chan error, 1)
+	)
 
-			var vacation models.VacationMetadata
-			if err := utils.ToStruct(metadata, &vacation); err != nil {
-				return nil, err
-			}
+	processDir := func(dir os.DirEntry) {
+		defer wg.Done()
 
-			log.Debug().Interface("vacation", vacation).Str("name", dir.Name()).Msg("vacation on path")
-
-			if location == "" || strings.EqualFold(vacation.Location, location) {
-				vacations = append(vacations, vacation.ToHTML())
-			}
+		if !dir.IsDir() {
+			return
 		}
+
+		metadata, err := s.markdowner.ToMetadata(filepath.Join(s.config.ContentDir, "vacations", dir.Name(), "index.md"))
+		if err != nil {
+			errChan <- err
+			return
+		}
+
+		var vacation models.VacationMetadata
+		if err := utils.ToStruct(metadata, &vacation); err != nil {
+			errChan <- err
+			return
+		}
+
+		if location == "" || strings.EqualFold(vacation.Location, location) {
+			vacations = append(vacations, vacation.ToHTML())
+		}
+	}
+
+	for _, dir := range dirs {
+		wg.Add(1)
+		go processDir(dir)
+	}
+
+	go func() {
+		wg.Wait()
+		close(errChan)
+	}()
+
+	if err := <-errChan; err != nil {
+		return nil, err
 	}
 
 	s.cache = vacations
