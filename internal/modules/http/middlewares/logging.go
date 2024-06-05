@@ -8,8 +8,8 @@ import (
 
 func Logging(next http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		log.Debug().Str("method", r.Method).Str("url", r.URL.Path).Msg("request received")
+		log.Debug().Str("method", r.Method).Str("url", r.URL.Path).Interface("query", r.URL.Query()).Msg("request received")
 		next.ServeHTTP(w, r)
-		log.Debug().Msg("request handled successfully")
+		log.Debug().Str("method", r.Method).Str("url", r.URL.Path).Interface("query", r.URL.Query()).Msg("request success")
 	})
 }

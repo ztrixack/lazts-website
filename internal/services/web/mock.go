@@ -17,6 +17,11 @@ func (m *Mock) RenderMarkdown(w io.Writer, path string, data map[string]interfac
 	return ret.Error(0)
 }
 
+func (m *Mock) RenderPartial(w io.Writer, path string, data map[string]interface{}) error {
+	ret := m.Called(w, path, data)
+	return ret.Error(0)
+}
+
 func (m *Mock) RenderPage(w io.Writer, path string, data map[string]interface{}) error {
 	ret := m.Called(w, path, data)
 	return ret.Error(0)

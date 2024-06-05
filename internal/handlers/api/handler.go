@@ -21,6 +21,7 @@ func New(m http.Moduler, ws web.Servicer, bs book.Servicer, vs vacation.Servicer
 }
 
 func (h *handler) setRouter(m http.Moduler) {
-	m.Get("/", h.Home)
+	m.Get("/books", h.Books)
 	m.Get("/about", h.About)
+	m.Get("/", h.Home)
 }

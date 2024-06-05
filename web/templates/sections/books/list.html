@@ -1,0 +1,42 @@
+{{define "book-list"}}
+<div class="container mx-auto">
+  <div class="flex flex-wrap items-center justify-evenly gap-12">
+    {{range .Books}}
+    <div class="relative h-96">
+      <div class="group h-64 w-44 cursor-pointer [perspective:1000px]">
+        <div
+          class="relative h-full w-full transition-all duration-500 [transform-style:preserve-3d] group-hover:[transform:rotateY(180deg)]  shadow shadow-gray-500"
+        >
+          <div class="absolute inset-0 border border-gray-500 bg-white dark:border-0">
+            <img src="{{.Cover}}" alt="{{.Title}}" class="h-full w-full object-cover" loading="lazy" />
+            <div
+              class="absolute right-0 top-2 transform text-nowrap p-1 pl-4 text-right text-xs font-light text-white opacity-80 transition-opacity duration-500 group-hover:opacity-0 {{if eq .Status "done"}}bg-green-700{{end}}{{if eq .Status "reading"}}bg-orange-700{{end}}{{if eq .Status "wishlist"}}bg-gray-700{{end}}"
+            >
+              {{.Catalog}}
+            </div>
+          </div>
+          <div
+            class="absolute inset-0 h-full w-full overflow-hidden bg-black/80 px-4 text-center text-slate-200 [backface-visibility:hidden] [transform:rotateY(180deg)]"
+          >
+            <div class="flex min-h-64 flex-col items-center justify-center">
+              <p class="text-xs font-light italic leading-loose tracking-wide">"{{.Description}}"</p>
+              <p class="mt-4 text-sm font-semibold">{{.Authors}}</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="mx-auto mt-4 flex max-w-40 flex-col items-center justify-center text-slate-900 dark:text-slate-100">
+        <p class="text-center text-sm">{{.Title}}</p>
+        {{ if ne .Number "" }}
+        <p class="text-center text-xs">
+          เล่ม
+          <span id="book-number-{{.Title}}">{{.Number}}</span>
+        </p>
+        {{end}}
+      </div>
+    </div>
+    {{end}}
+  </div>
+</div>
+{{end}}

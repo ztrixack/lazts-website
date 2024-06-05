@@ -46,13 +46,8 @@
                 <span class="text-sm text-slate-400">Vacations</span>
               </div>
               <div class="mr-4 p-3 text-center">
-                <span
-                  class="block text-xl font-bold uppercase tracking-wide text-slate-600"
-                  hx-get="/_books/count"
-                  hx-trigger="load"
-                  hx-swap="innerHTML"
-                >
-                  ?
+                <span class="block text-xl font-bold uppercase tracking-wide text-slate-600">
+                  {{.BookCounts}}
                 </span>
                 <span class="text-sm text-slate-400">Books</span>
               </div>

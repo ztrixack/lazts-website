@@ -3,6 +3,7 @@ package main
 import (
 	"context"
 	"lazts/internal/handlers/api"
+	"lazts/internal/handlers/books"
 	"lazts/internal/handlers/file"
 	"lazts/internal/modules/http"
 	"lazts/internal/modules/http/middlewares"
@@ -33,8 +34,12 @@ func main() {
 	imaging := imaging.New()
 	markdown := markdown.New()
 
+	webber := web.New(markdown)
+	booker := book.New()
+
+	books.New(server, webber, booker)
 	file.New(server, watermark.New(imaging))
-	api.New(server, web.New(markdown), book.New(), vacation.New(markdown), memo.New(markdown))
+	api.New(server, webber, booker, vacation.New(markdown), memo.New(markdown))
 
 	go func() {
 		log.Info().Msgf("starting server on port %s", server.Address)

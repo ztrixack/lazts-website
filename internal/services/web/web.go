@@ -13,6 +13,7 @@ import (
 
 type Servicer interface {
 	RenderPage(w io.Writer, path string, data map[string]interface{}) error
+	RenderPartial(w io.Writer, path string, data map[string]interface{}) error
 	RenderMarkdown(w io.Writer, path string, data map[string]interface{}) error
 }
 

@@ -5,7 +5,7 @@ import (
 )
 
 func (s *service) GetStats() (*models.BookStats, error) {
-	books, err := s.Get()
+	books, err := s.Get("", "", "")
 	if err != nil {
 		return nil, err
 	}
@@ -24,6 +24,7 @@ func (s *service) GetStats() (*models.BookStats, error) {
 		}
 	}
 
+	s.size = len(books)
 	return &models.BookStats{
 		Total:     len(books),
 		Completed: completed,

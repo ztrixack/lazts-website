@@ -3,15 +3,15 @@ package book
 import (
 	"encoding/json"
 	"lazts/internal/models"
-	"net/url"
 	"os"
 	"path/filepath"
 	"strings"
 )
 
-func (s *service) Get() ([]models.Book, error) {
-	if len(s.cache) != 0 {
-		return s.cache, nil
+func (s *service) Get(search, catalog, status string) ([]models.Book, error) {
+	cpath := search + catalog + status
+	if len(s.caches[cpath]) != 0 {
+		return s.caches[cpath], nil
 	}
 
 	files, err := os.ReadDir(filepath.Join(s.config.ContentDir, "books"))
@@ -32,26 +32,35 @@ func (s *service) Get() ([]models.Book, error) {
 				return nil, err
 			}
 
-			for i, book := range list {
-				if book.Cover == "" {
-					list[i].Cover = "https://picsum.photos/640/480"
+			for _, book := range list {
+				if status != "" && book.Status != status {
 					continue
 				}
-				name, _ := strings.CutSuffix(file.Name(), ".json")
-				list[i].Cover, err = url.JoinPath("/static/contents/books", name, book.Cover)
-				if err != nil {
-					return nil, err
+
+				if catalog != "" && book.Catalog != catalog {
+					continue
+				}
+
+				if search != "" && !strings.Contains(strings.ToLower(book.Title), strings.ToLower(search)) {
+					continue
+				}
+
+				if book.Cover == "" {
+					book.Cover = "https://picsum.photos/640/480"
+				} else {
+					name := strings.TrimSuffix(file.Name(), ".json")
+					book.Cover = "/static/contents/books/" + name + "/" + book.Cover
 				}
 
 				if book.Review == "" {
-					list[i].Review = book.Description
+					book.Review = book.Description
 				}
-			}
 
-			books = append(books, list...)
+				books = append(books, book)
+			}
 		}
 	}
 
-	s.cache = books
+	s.caches[cpath] = books
 	return books, nil
 }

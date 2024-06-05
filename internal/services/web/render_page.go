@@ -28,7 +28,5 @@ func (m *service) RenderPage(w io.Writer, name string, data map[string]interface
 		return ErrParseContent
 	}
 
-	log.Debug().Str("page", name).Msg("rendering page")
-
 	return tmpl.ExecuteTemplate(w, "base", m.injectData(data))
 }

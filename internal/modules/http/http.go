@@ -4,6 +4,9 @@ import (
 	"context"
 	"fmt"
 	"net/http"
+	"strings"
+
+	"github.com/rs/zerolog/log"
 )
 
 type Moduler interface {
@@ -48,6 +51,12 @@ func (m *module) Get(path string, handler http.HandlerFunc) {
 	m.mux.HandleFunc(path, func(w http.ResponseWriter, r *http.Request) {
 		if r.Method != http.MethodGet {
 			w.WriteHeader(http.StatusMethodNotAllowed)
+			return
+		}
+
+		if !strings.HasPrefix(r.URL.Path, "/static") && r.URL.Path != path {
+			log.Debug().Str("url", r.URL.Path).Str("path", path).Msg("invalid path")
+			w.WriteHeader(http.StatusNotFound)
 			return
 		}
 
