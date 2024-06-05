@@ -1,0 +1,159 @@
+[
+  {
+    "title": "เรียนแบบนี้แต่แรก ก็เก่งไปนานแล้ว",
+    "subtitle": "Learning How To Learn",
+    "description": "อายุเท่าไหร่ก็ไม่สำคัญ เพราะใครๆ ก็ปลดล็อกพลังสมองได้",
+    "authors": [
+      "Dr. Barbara Oakley",
+      "Dr. Terrence Sejnowski",
+      "Alistair McConville"
+    ],
+    "translator": "",
+    "publisher": "BingoBook",
+    "cover": "learning_how_to_learn.webp",
+    "status": "completed",
+    "catalog": "self-improvement"
+  },
+  {
+    "title": "เราทุกคนล้วนมีร้านเวทมนตร์อยู่ในใจ",
+    "subtitle": "Into the Magic Shop",
+    "description": "การค้นพบปริศนาของสมองและความลับของหัวใจ ที่เปลี่ยนเด็กชายผู้มีชีวิตแหลกสลายให้กลายเป็นประสาทศัลยแพทย์ที่โลกยกย่อง",
+    "authors": [
+      "M.D. James R. Doty"
+    ],
+    "translator": "",
+    "publisher": "Amarin",
+    "cover": "2F4421C1-1730-4C76-A19A-0005331D0248.webp",
+    "status": "completed",
+    "catalog": "self-improvement"
+  },
+  {
+    "title": "ชีวิตเรามีแค่สี่พันสัปดาห์",
+    "subtitle": "Four Thousand Weeks: Time Management for Mortals",
+    "description": "การค้นพบปริศนาของสมองและความลับของหัวใจ ที่เปลี่ยนเด็กชายผู้มีชีวิตแหลกสลายให้กลายเป็นประสาทศัลยแพทย์ที่โลกยกย่อง",
+    "authors": [
+      "Oliver Burkerman"
+    ],
+    "translator": "วาดฝัน คุณาวงศ์",
+    "publisher": "Amarin",
+    "cover": "four_thousand_weeks.webp",
+    "status": "reading",
+    "catalog": "self-improvement"
+  },
+  {
+    "title": "ปาฏิหาริย์ร้านชำของคุณนามิยะ",
+    "subtitle": "",
+    "description": "บางครั้งเราก็ไม่สามารถตัดสินใจอะไรได้ด้วยมุมมองของตัวเอง คำตอบที่ดีที่สุดก็อาจจะมาจากคนที่รู้จักเราน้อยที่สุดก็เป็นได้",
+    "authors": [
+      "M.D. James R. Doty"
+    ],
+    "translator": "",
+    "publisher": "น้ำพุ",
+    "cover": "9786162872600l.webp",
+    "status": "completed",
+    "catalog": "liberature"
+  },
+  {
+    "title": "ร้านไม่สะดวกซื้อของคุณทกโก",
+    "subtitle": "",
+    "description": "",
+    "authors": [
+      "คิมโฮย็อน"
+    ],
+    "translator": "มินตรา อินทรารัตน์",
+    "publisher": "",
+    "cover": "4D50ADE2-D7DF-41BC-AAAC-C215D4B45C26.webp",
+    "status": "reading",
+    "catalog": "liberature"
+  },
+  {
+    "title": "คุยเฟื่องเรื่องไขมัน",
+    "subtitle": "ซีรีส์สนุกจนตาสว่าง",
+    "description": "ไขทุกข้อข้องใจเกี่ยวกับไขมันโดยผู้เชี่ยวชาญ!",
+    "authors": [
+      "ศ. โมริงุจิ โทรุ"
+    ],
+    "translator": "จินดาภร เสนาจักร์",
+    "publisher": "Daifuku",
+    "status": "completed",
+    "catalog": "healthy",
+    "isbn": "978-616-14-0560-1"
+  },
+  {
+    "title": "เรื่องราวของภูมิคุ้มกัน",
+    "subtitle": "ซีรีส์สนุกจนตาสว่าง",
+    "description": "แพทย์จะอธิบายวิธีในการเพิ่มระบบภูมิคุ้มกันได้อย่างมีประสิทธิภาพที่สุดให้คุณเอง!",
+    "authors": [
+      "อิชิฮาระ นีนะ"
+    ],
+    "translator": "จินดาภร เสนาจักร์",
+    "publisher": "Daifuku",
+    "status": "completed",
+    "catalog": "healthy"
+  },
+  {
+    "title": "Berserk",
+    "description": "Guts, a former mercenary now known as the 'Black Swordsman,' is out for revenge.",
+    "number": "1 - 42",
+    "authors": [
+      "Miura Kentaro"
+    ],
+    "translator": "Siam Inter Comics",
+    "publisher": "Siam Inter Comics",
+    "cover": "berserk.webp",
+    "status": "reading",
+    "catalog": "manga"
+  },
+  {
+    "title": "Berserk ภาคอัศวินมังกรเพลิง",
+    "subtitle": "อัศวินมังกรเพลิง",
+    "description": "",
+    "authors": [
+      "Makoto Fukami"
+    ],
+    "translator": "Siam Inter Comics",
+    "publisher": "Siam Inter Comics",
+    "cover": "9786164575349.webp",
+    "status": "completed",
+    "catalog": "novel"
+  },
+  {
+    "title": "Shaman King",
+    "description": "",
+    "number": "1 - 35",
+    "authors": [
+      "Hiroyuki Takei"
+    ],
+    "translator": "Siam Inter Comics",
+    "publisher": "Siam Inter Comics",
+    "cover": "shaman-king.webp",
+    "status": "completed",
+    "catalog": "manga"
+  },
+  {
+    "title": "Shaman King 0",
+    "description": "",
+    "number": "1 - 2",
+    "authors": [
+      "Hiroyuki Takei"
+    ],
+    "translator": "Siam Inter Comics",
+    "publisher": "Siam Inter Comics",
+    "cover": "shaman-king-0.webp",
+    "status": "completed",
+    "catalog": "manga"
+  },
+  {
+    "title": "The Promised Neverland",
+    "description": "",
+    "number": "1 - 20",
+    "authors": [
+      "Kaiu Shirai"
+    ],
+    "translator": "Siam Inter Comics",
+    "publisher": "Siam Inter Comics",
+    "cover": "the-promised-neverland.webp",
+    "status": "completed",
+    "catalog": "manga"
+  }
+]

@@ -14,6 +14,21 @@ func (h *handler) Home(w http.ResponseWriter, r *http.Request) {
 	data["Blackhole"] = utils.RandomizeBlackholes(1000)
 	data["Cloud"] = utils.RandomizeClouds(100)
 
+	var err error
+	data["BookStats"], err = h.booker.GetStats()
+	if err != nil {
+		log.Error().Err(err).Msg("failed to get book stats")
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+
+	data["BookShelf"], err = h.booker.GetShelf(2, 3, 4)
+	if err != nil {
+		log.Error().Err(err).Msg("failed to get random 2 books")
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+
 	if err := h.webber.RenderPage(w, "home", data); err != nil {
 		log.Error().Err(err).Msg("failed to render page")
 	}

@@ -8,6 +8,7 @@ import (
 	"lazts/internal/modules/http/middlewares"
 	"lazts/internal/modules/imaging"
 	"lazts/internal/modules/markdown"
+	"lazts/internal/services/book"
 	"lazts/internal/services/watermark"
 	"lazts/internal/services/web"
 	"os"
@@ -27,11 +28,11 @@ func main() {
 	server := http.New()
 	server.Use(middlewares.Logging)
 
-	markdown := markdown.New()
 	imaging := imaging.New()
+	markdown := markdown.New()
 
 	file.New(server, watermark.New(imaging))
-	api.New(server, web.New(markdown))
+	api.New(server, web.New(markdown), book.New())
 
 	go func() {
 		log.Info().Msgf("starting server on port %s", server.Address)

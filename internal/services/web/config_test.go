@@ -24,7 +24,7 @@ func TestParseConfig(t *testing.T) {
 			setup: func() {
 				os.Setenv("WEB_DIR", "/custom_web")
 				os.Setenv("WEB_TITLE", "test")
-				os.Setenv("WEB_EXCERPT", "test")
+				os.Setenv("WEB_EXCERPT", "excerpt")
 			},
 			teardown: func() {
 				os.Unsetenv("WEB_DIR")
@@ -55,6 +55,7 @@ func TestParseConfig(t *testing.T) {
 
 			assert.Equal(t, tt.expectedDir, cfg.Dir, "WebDir should be equal")
 			assert.Equal(t, tt.expectedTitle, cfg.Title, "WebTitle should be equal")
+			assert.Equal(t, tt.expectedExcerpt, cfg.Excerpt, "WebExcerpt should be equal")
 		})
 	}
 }

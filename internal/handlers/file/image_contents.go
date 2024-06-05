@@ -18,7 +18,7 @@ func (h *handler) ImageContents(w http.ResponseWriter, r *http.Request) {
 
 	imagePath, _ := strings.CutPrefix(r.URL.Path, "/static")
 
-	img, err := h.ws.LoadImage("./web" + imagePath)
+	img, err := h.ws.LoadImage(imagePath)
 	if err != nil {
 		http.Error(w, "Failed to load image", http.StatusInternalServerError)
 		return

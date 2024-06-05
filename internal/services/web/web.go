@@ -41,6 +41,10 @@ func parseTemplates(path string) *template.Template {
 		log.Fatal().Err(err).Msg("failed to parse partials")
 	}
 
+	if _, err := utils.ParseAnyTemplates(tmpl, filepath.Join(path, "templates", "sections/**/*.html")); err != nil {
+		log.Fatal().Err(err).Msg("failed to parse sections")
+	}
+
 	return tmpl
 }
 

@@ -1,0 +1,63 @@
+{{define "book-hero"}}
+<div class="my-80 flex justify-center items-center">
+<div class="relative grid grid-cols-1 items-center gap-16 lg:grid-cols-2">
+  <div class="flex flex-col items-center justify-end">
+    <h2 class="text-3xl font-bold tracking-tight text-slate-900 dark:text-slate-100">📚 Book Collection</h2>
+    <p class="mt-4 max-w-xs text-center text-lg font-light leading-loose text-slate-600 dark:text-slate-400">
+      รวบรวมหนังสือที่เคยอ่านมาแล้ว เวลาไปงานหนังสือจะได้ไม่ซื้อซ้ำ 😆
+    </p>
+
+    <div class="my-12 grid w-full grid-cols-3">
+      <div id="stats" class="flex flex-col space-y-2 border-gray-300 px-8 py-4 dark:border-gray-700">
+        <div class="flex items-center justify-between">
+          <h4 class="text-sm text-slate-600 dark:text-slate-400">หนังสือทั้งหมด</h4>
+        </div>
+        <span class="self-start text-3xl text-slate-800 dark:text-slate-200 md:text-5xl">
+          {{.BookStats.Total}}
+          <span class="text-xs font-light text-slate-600 dark:text-slate-400">เล่ม</span>
+        </span>
+      </div>
+
+      <div id="stats" class="flex flex-col space-y-2 border-l border-gray-300 px-8 py-4 dark:border-gray-700">
+        <div class="flex items-center justify-between">
+          <h4 class="text-sm text-slate-600 dark:text-slate-400">อ่านจบแล้ว</h4>
+        </div>
+        <span class="self-start text-3xl text-slate-800 dark:text-slate-200 md:text-5xl">
+          {{.BookStats.Completed}}
+          <span class="text-xs font-light text-slate-600 dark:text-slate-400">เล่ม</span>
+        </span>
+      </div>
+
+      <div id="stats" class="flex flex-col space-y-2 border-l border-gray-300 px-8 py-4 dark:border-gray-700">
+        <div class="flex items-center justify-between">
+          <h4 class="text-sm text-slate-600 dark:text-slate-400">รอแกะซีล</h4>
+        </div>
+        <span class="self-start text-3xl text-slate-800 dark:text-slate-200 md:text-5xl">
+          {{.BookStats.Unread}}
+          <span class="text-xs font-light text-slate-600 dark:text-slate-400">เล่ม</span>
+        </span>
+      </div>
+    </div>
+
+    <a
+      href="/books"
+      class="mt-4 inline-block rounded border border-orange-500 bg-white px-8 py-3 text-center text-orange-500 transition hover:bg-orange-400 hover:text-white"
+    >
+      ห้องหนังสือ
+    </a>
+  </div>
+
+  <div class="flex items-center justify-start space-x-6 max-lg:hidden md:space-x-8">
+    {{range $shelfs := .BookShelf}}
+    <div class="grid flex-shrink-0 grid-cols-1 gap-y-6 md:gap-y-8">
+      {{range $book := $shelfs}}
+      <div class="h-48 w-32 overflow-hidden rounded-md bg-zinc-500 shadow-xl shadow-zinc-300 dark:shadow-zinc-700">
+        <img src="{{$book.Cover}}" alt="book" class="h-full w-full object-cover object-center" loading="lazy" />
+      </div>
+      {{end}}
+    </div>
+    {{end}}
+  </div>
+</div>
+</div>
+{{end}}
