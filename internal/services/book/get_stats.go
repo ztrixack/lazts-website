@@ -29,6 +29,7 @@ func (s *service) GetStats() (*models.BookStats, error) {
 		Completed: completed,
 		Reading:   reading,
 		Unread:    unread,
+		Pending:   len(books) - completed,
 	}, nil
 
 }

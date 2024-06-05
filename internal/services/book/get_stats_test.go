@@ -35,6 +35,7 @@ func TestGetStats(t *testing.T) {
 				Completed: 2,
 				Reading:   1,
 				Unread:    1,
+				Pending:   2,
 			},
 			expectedError: false,
 		},

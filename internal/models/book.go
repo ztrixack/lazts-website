@@ -19,4 +19,5 @@ type BookStats struct {
 	Completed int `json:"completed"`
 	Reading   int `json:"reading"`
 	Unread    int `json:"unread"`
+	Pending   int `json:"pending"`
 }
