@@ -1,5 +1,5 @@
 ---
-title: Tokyo, Japan 1st Time 🗻
+title: Tokyo, Japan 1st Time
 slug: 2017-tokyo
 excerpt: ไปเที่ยวญี่ปุ่นเป็นครั้งแรก เริ่มกันที่ Mr. Fuji
 location: Japan

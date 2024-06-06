@@ -6,6 +6,8 @@ import (
 	"path/filepath"
 	"strings"
 	"time"
+
+	"github.com/rs/zerolog/log"
 )
 
 type MemoMetadata struct {
@@ -21,16 +23,18 @@ type MemoMetadata struct {
 }
 
 type Memo struct {
-	Title            string
-	Excerpt          string
-	FeaturedImage    string
-	Link             string
-	Tags             []Tag
-	ReadTime         int
-	DateTimeISO      string
-	DateTimeReadable string
-	DayMonth         string
-	Year             string
+	Title              string
+	Excerpt            string
+	FeaturedImage      string
+	Link               string
+	Tags               []Tag
+	ReadTime           int
+	DateTimeISO        string
+	DateTimeReadable   string
+	LastUpdatedISO     string
+	LastUpdateReadable string
+	DayMonth           string
+	Year               string
 }
 
 type Tag struct {
@@ -44,19 +48,25 @@ func (m MemoMetadata) ToMemo() Memo {
 	if err != nil {
 		publishedAt = time.Now()
 	}
+	lastUpdatedAt, err := time.Parse("2006-01-02", m.LastUpdatedAt)
+	if err != nil {
+		lastUpdatedAt = time.Now()
+	}
 
 	return Memo{
 
-		Title:            m.Title,
-		Excerpt:          m.Excerpt,
-		FeaturedImage:    utils.UpdateFeaturedImagePaths(filepath.Join("/static/contents/memos", m.Slug), m.FeaturedImage),
-		Link:             filepath.Join("/memos", m.Tags[0], m.Slug),
-		Tags:             ToTags(m.Tags),
-		ReadTime:         m.ReadTime,
-		DateTimeISO:      publishedAt.Format(time.RFC3339),
-		DateTimeReadable: utils.ToYearMonthDay(publishedAt),
-		DayMonth:         utils.ToDayMonth(publishedAt),
-		Year:             fmt.Sprintf("%d", publishedAt.Year()),
+		Title:              m.Title,
+		Excerpt:            m.Excerpt,
+		FeaturedImage:      utils.UpdateFeaturedImagePaths(filepath.Join("/static/contents/memos", m.Slug), m.FeaturedImage),
+		Link:               filepath.Join("/memos", m.Tags[0], m.Slug),
+		Tags:               ToTags(m.Tags),
+		ReadTime:           m.ReadTime,
+		DateTimeISO:        publishedAt.Format(time.RFC3339),
+		DateTimeReadable:   utils.ToYearMonthDay(publishedAt),
+		LastUpdatedISO:     lastUpdatedAt.Format(time.RFC3339),
+		LastUpdateReadable: utils.ToYearMonthDay(lastUpdatedAt),
+		DayMonth:           utils.ToDayMonth(publishedAt),
+		Year:               fmt.Sprintf("%d", publishedAt.Year()),
 	}
 }
 
@@ -87,4 +97,20 @@ func ToBreadcrumbs(tag string) []Tag {
 			Link: filepath.Join("/memos", tag),
 		},
 	}
+}
+
+type MemoSort []Memo
+
+func (m MemoSort) Len() int      { return len(m) }
+func (m MemoSort) Swap(i, j int) { m[i], m[j] = m[j], m[i] }
+func (m MemoSort) Less(i, j int) bool {
+	// Convert DateTimeISO string to time.Time for comparison
+	t1, err1 := time.Parse(time.RFC3339, m[i].DateTimeISO)
+	t2, err2 := time.Parse(time.RFC3339, m[j].DateTimeISO)
+	if err1 != nil || err2 != nil {
+		log.Error().Err(err1).Err(err2).Msg("Error parsing date")
+		return false
+	}
+
+	return t1.After(t2) // Sort in descending order
 }

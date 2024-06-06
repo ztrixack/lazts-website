@@ -5,6 +5,7 @@ import (
 	"lazts/internal/utils"
 	"os"
 	"path/filepath"
+	"sort"
 	"sync"
 )
 
@@ -79,6 +80,8 @@ func (s *service) Get(offset uint, limit uint) ([]models.Memo, error) {
 	if err := <-errChan; err != nil {
 		return nil, err
 	}
+
+	sort.Sort(models.MemoSort(memos))
 
 	s.cache = memos
 	return memos, nil

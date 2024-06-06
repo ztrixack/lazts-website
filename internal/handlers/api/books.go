@@ -13,7 +13,7 @@ func (h *handler) Books(w http.ResponseWriter, r *http.Request) {
 	status := r.URL.Query().Get("status")
 
 	var err error
-	books, err := h.booker.Get(search, catalog, status)
+	data["Books"], err = h.booker.Get(search, catalog, status)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
@@ -24,8 +24,6 @@ func (h *handler) Books(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	data["Size"] = h.booker.GetSize()
-	data["Books"] = books
-	data["Count"] = len(books)
 	data["CurrentCatalog"] = catalog
 	data["CurrentStatus"] = status
 

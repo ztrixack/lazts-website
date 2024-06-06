@@ -3,10 +3,10 @@
   class="relative mx-auto flex w-full flex-col space-y-3 rounded-xl border border-white bg-white p-3 shadow-lg transition-transform hover:-translate-y-2 hover:shadow-xl md:max-w-3xl md:flex-row md:space-x-5 md:space-y-0"
   href="{{.Link}}"
 >
-  <div class="grid w-full place-items-center overflow-hidden bg-white md:w-1/3">
-    <img src="{{.FeaturedImage}}" alt="{{.Title}}" class="aspect-square rounded-xl" loading="lazy" />
+  <div class="grid w-full place-items-center overflow-hidden md:w-1/3 shadow-xl rounded-xl shadow-gray-300">
+    <img src="{{.FeaturedImage}}" alt="{{.Title}}" class="aspect-square rounded-xl w-full" loading="lazy" />
   </div>
-  <div class="flex w-full flex-col bg-white md:w-2/3">
+  <div class="flex w-full flex-col bg-white md:w-2/3 p-4">
     <div class="item-center flex justify-between">
       <p class="text-xs font-light text-slate-500">
         <time datetime="{{.DateTimeISO}}">{{.DateTimeReadable}}</time>
@@ -15,7 +15,7 @@
         <span class="text-2xl">{{.Location}}</span>
       </div>
     </div>
-    <h3 class="text-2xl font-semibold text-slate-800">{{.Title}}</h3>
+    <h3 class="text-xl font-semibold text-slate-800 line-clamp-1">{{.Title}}</h3>
     <p class="line-clamp-3 flex-1 overflow-clip text-ellipsis text-sm font-light tracking-wide text-slate-500 mt-4 mr-4">{{.Excerpt}}</p>
   </div>
 </a>

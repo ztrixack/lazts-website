@@ -5,6 +5,8 @@ import (
 	"time"
 
 	"lazts/internal/utils"
+
+	"github.com/rs/zerolog/log"
 )
 
 type VacationMetadata struct {
@@ -50,4 +52,20 @@ func (v VacationMetadata) ToHTML() Vacation {
 		FeaturedImage:    utils.UpdateFeaturedImagePaths(filepath.Join("/static/contents/vacations", v.Slug), v.FeaturedImage),
 		Link:             filepath.Join("/vacations", v.Slug),
 	}
+}
+
+type VacationSort []Vacation
+
+func (v VacationSort) Len() int      { return len(v) }
+func (v VacationSort) Swap(i, j int) { v[i], v[j] = v[j], v[i] }
+func (v VacationSort) Less(i, j int) bool {
+	// Convert DateTimeISO string to time.Time for comparison
+	t1, err1 := time.Parse(time.RFC3339, v[i].DateTimeISO)
+	t2, err2 := time.Parse(time.RFC3339, v[j].DateTimeISO)
+	if err1 != nil || err2 != nil {
+		log.Error().Err(err1).Err(err2).Msg("Error parsing date")
+		return false
+	}
+
+	return t1.After(t2) // Sort in descending order
 }

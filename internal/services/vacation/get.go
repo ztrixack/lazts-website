@@ -5,6 +5,7 @@ import (
 	"lazts/internal/utils"
 	"os"
 	"path/filepath"
+	"sort"
 	"strings"
 	"sync"
 )
@@ -62,6 +63,8 @@ func (s *service) Get(location string) ([]models.Vacation, error) {
 	if err := <-errChan; err != nil {
 		return nil, err
 	}
+
+	sort.Sort(models.VacationSort(vacations))
 
 	s.cache = vacations
 	return vacations, nil
