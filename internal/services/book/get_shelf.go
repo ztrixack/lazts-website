@@ -20,6 +20,5 @@ func (s *service) GetShelf(rows ...int) ([][]models.Book, error) {
 		}
 	}
 
-	s.size = len(books)
 	return result, nil
 }

@@ -5,6 +5,11 @@ import (
 )
 
 func (s *service) GetStats() (*models.BookStats, error) {
+	const KEY = "STATS"
+	if value, found := s.cache.Get(KEY); found {
+		return value.(*models.BookStats), nil
+	}
+
 	books, err := s.Get("", "", "")
 	if err != nil {
 		return nil, err
@@ -23,14 +28,14 @@ func (s *service) GetStats() (*models.BookStats, error) {
 			unread++
 		}
 	}
-
-	s.size = len(books)
-	return &models.BookStats{
+	stats := &models.BookStats{
 		Total:     len(books),
 		Completed: completed,
 		Reading:   reading,
 		Unread:    unread,
 		Pending:   len(books) - completed,
-	}, nil
+	}
 
+	s.cache.Set(KEY, stats)
+	return stats, nil
 }

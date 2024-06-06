@@ -15,8 +15,8 @@ import (
 
 func (s *service) Get(offset uint, limit uint, tag string) ([]models.Memo, error) {
 	KEY := fmt.Sprintf("DATA-%d-%d-%s", offset, limit, tag)
-	if s.cache[KEY] != nil {
-		return s.cache[KEY].([]models.Memo), nil
+	if value, found := s.cache.Get(KEY); found {
+		return value.([]models.Memo), nil
 	}
 
 	dirs, err := os.ReadDir(filepath.Join(s.config.ContentDir, "memos"))
@@ -87,10 +87,7 @@ func (s *service) Get(offset uint, limit uint, tag string) ([]models.Memo, error
 	}
 
 	sort.Sort(models.MemoSort(memos))
-
-	log.Debug().Int("count", len(memos)).Uint("offset", offset).Uint("limit", limit).Str("tag", tag).Msg("Get memos")
-
-	s.cache[KEY] = memos
+	s.cache.Set(KEY, memos)
 	return memos, nil
 }
 

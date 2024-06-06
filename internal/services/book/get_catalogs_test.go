@@ -3,46 +3,23 @@ package book
 import (
 	"lazts/internal/models"
 	"lazts/internal/utils"
-	"os"
 	"testing"
 
 	"github.com/stretchr/testify/assert"
 )
 
 func TestGetCatalogs(t *testing.T) {
-	content := `[{
-		"catalog": "A"
-	},{
-		"catalog": "A"
-	},{
-		"catalog": "B"
-	},{
-		"catalog": "C"
-	},{
-		"catalog": "D"
-	}]`
+	const CONTENT_DIR = "test_get_catalogs"
 
 	tests := []struct {
 		name           string
-		contentDir     string
-		cached         []models.Option
-		setup          func(t *testing.T, dir string)
-		teardown       func(t *testing.T, dir string)
-		expectedResult []models.Option
+		setup          func(t *testing.T)
 		expectedError  bool
+		expectedResult []models.Option
 	}{
 		{
-			name:       "Successful retrieval",
-			contentDir: "test_data",
-			cached:     nil,
-			setup: func(t *testing.T, dir string) {
-				os.Setenv("CONTENT_DIR", dir)
-				utils.CreateTestFile(t, dir, "books/test.json", content)
-			},
-			teardown: func(t *testing.T, dir string) {
-				os.Unsetenv("CONTENT_DIR")
-				utils.RemoveTestDir(t, dir)
-			},
+			name:          "Successful retrieval",
+			expectedError: false,
 			expectedResult: []models.Option{
 				{Key: "A", Value: "A"},
 				{Key: "B", Value: "B"},
@@ -50,52 +27,31 @@ func TestGetCatalogs(t *testing.T) {
 				{Key: "D", Value: "D"},
 				{Key: "ทั้งหมด", Value: ""},
 			},
-			expectedError: false,
+			setup: func(t *testing.T) {
+				utils.CreateTestFile(t, CONTENT_DIR, "books/test.json", `[
+					{"catalog": "A"},
+					{"catalog": "A"},
+					{"catalog": "B"},
+					{"catalog": "C"},
+					{"catalog": "D"}]`)
+			},
 		},
 		{
-			name:       "Error from Get method",
-			contentDir: "test_data",
-			cached:     nil,
-			setup: func(t *testing.T, dir string) {
-				os.Setenv("CONTENT_DIR", dir)
-			},
-			teardown: func(t *testing.T, dir string) {
-				os.Unsetenv("CONTENT_DIR")
-				utils.RemoveTestDir(t, dir)
-			},
-			expectedResult: nil,
+			name:           "Error from Get method",
 			expectedError:  true,
-		},
-		{
-			name:       "Return cached catalogs",
-			contentDir: "test_data",
-			cached: []models.Option{
-				{Key: "ทั้งหมด", Value: ""},
-				{Key: "CachedCatalog", Value: "CachedCatalog"},
+			expectedResult: nil,
+			setup: func(t *testing.T) {
 			},
-			setup: func(t *testing.T, dir string) {
-				os.Setenv("CONTENT_DIR", dir)
-			},
-			teardown: func(t *testing.T, dir string) {
-				os.Unsetenv("CONTENT_DIR")
-				utils.RemoveTestDir(t, dir)
-			},
-			expectedResult: []models.Option{
-				{Key: "CachedCatalog", Value: "CachedCatalog"},
-				{Key: "ทั้งหมด", Value: ""},
-			},
-			expectedError: false,
 		},
 	}
 
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			tt.setup(t, tt.contentDir)
-			defer tt.teardown(t, tt.contentDir)
+			s := setup(CONTENT_DIR)
+			defer teardown(t, CONTENT_DIR)
+			tt.setup(t)
 
-			r := New()
-			r.catalogs = tt.cached
-			result, err := r.GetCatalogs()
+			result, err := s.GetCatalogs()
 
 			if tt.expectedError {
 				assert.Error(t, err, "Expected an error but did not get one")

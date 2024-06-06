@@ -2,6 +2,7 @@ package book
 
 import (
 	"encoding/json"
+	"fmt"
 	"lazts/internal/models"
 	"os"
 	"path/filepath"
@@ -9,9 +10,9 @@ import (
 )
 
 func (s *service) Get(search, catalog, status string) ([]models.Book, error) {
-	cpath := search + catalog + status
-	if len(s.caches[cpath]) != 0 {
-		return s.caches[cpath], nil
+	KEY := fmt.Sprintf("DATA-%s-%s-%s", search, catalog, status)
+	if value, found := s.cache.Get(KEY); found {
+		return value.([]models.Book), nil
 	}
 
 	files, err := os.ReadDir(filepath.Join(s.config.ContentDir, "books"))
@@ -61,6 +62,6 @@ func (s *service) Get(search, catalog, status string) ([]models.Book, error) {
 		}
 	}
 
-	s.caches[cpath] = books
+	s.cache.Set(KEY, books)
 	return books, nil
 }

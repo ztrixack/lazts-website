@@ -1,6 +1,9 @@
 package book
 
-import "lazts/internal/models"
+import (
+	"lazts/internal/models"
+	"lazts/internal/modules/cache"
+)
 
 type Servicer interface {
 	Get(search, catalog, status string) ([]models.Book, error)
@@ -11,19 +14,15 @@ type Servicer interface {
 }
 
 type service struct {
-	config   *config
-	caches   map[string][]models.Book
-	catalogs []models.Option
-	size     int
+	config *config
+	cache  cache.Moduler
 }
 
 var _ Servicer = (*service)(nil)
 
 func New() *service {
 	return &service{
-		config:   parseConfig(),
-		caches:   make(map[string][]models.Book),
-		catalogs: nil,
-		size:     0,
+		config: parseConfig(),
+		cache:  cache.New(),
 	}
 }

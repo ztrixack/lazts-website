@@ -10,8 +10,8 @@ import (
 
 func (s *service) GetTags() ([]models.Tag, error) {
 	const KEY = "TAGS"
-	if cache, ok := s.cache[KEY].([]models.Tag); ok && cache != nil {
-		return cache, nil
+	if value, found := s.cache.Get(KEY); found {
+		return value.([]models.Tag), nil
 	}
 
 	memos, err := s.Get(0, math.MaxInt, "")
@@ -19,23 +19,27 @@ func (s *service) GetTags() ([]models.Tag, error) {
 		return nil, err
 	}
 
-	uniqueSet := make(map[string]*models.Tag)
+	uniqueSet := make(map[string]struct{})
 	tags := make([]models.Tag, 0)
 
 	for _, memo := range memos {
 		for _, tag := range memo.Tags {
-			if existingTag, exists := uniqueSet[tag.Name]; exists {
-				existingTag.Count++
+			if _, exists := uniqueSet[tag.Name]; exists {
+				for i, t := range tags {
+					if t.Name == tag.Name {
+						tags[i].Count++
+					}
+				}
 			} else {
 				tag.Count = 1
 				tag.Link = filepath.Join("/memos", strings.ToLower(tag.Name))
 				tags = append(tags, tag)
-				uniqueSet[tag.Name] = &tags[len(tags)-1]
+				uniqueSet[tag.Name] = struct{}{}
 			}
 		}
 	}
 
 	sort.Sort(models.TagSort(tags))
-
+	s.cache.Set(KEY, tags)
 	return tags, nil
 }
