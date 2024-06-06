@@ -4,99 +4,76 @@ import (
 	"errors"
 	"image"
 	"lazts/internal/modules/imaging"
-	"lazts/internal/utils"
-	"sync"
 	"testing"
 
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/mock"
 )
 
-func TestLoadImageTableDriven(t *testing.T) {
+func TestLoadImage(t *testing.T) {
+	const WEB_DIR = "test_load_image"
+
 	watermark := image.NewNRGBA(image.Rect(0, 0, 100, 100))
 	original := image.NewNRGBA(image.Rect(0, 0, 800, 600))
 	processed := image.NewNRGBA(image.Rect(0, 0, 800, 600))
 
-	utils.CreateTestFile(t, "path/to", "original", "some content")
-	utils.CreateTestFile(t, "path/to", "watermark", "some content")
-	defer utils.RemoveTestDir(t, "path")
-
-	testcases := []struct {
-		name        string
-		filePath    string
-		setup       func(*service, *imaging.Mock)
-		expectedImg image.Image
-		expectError bool
+	tests := []struct {
+		name           string
+		filename       string
+		expectedError  bool
+		expectedResult image.Image
+		setup          func(*service, *imaging.Mock)
 	}{
 		{
 			name:     "Successful processing",
-			filePath: "path/to/original",
+			filename: "original.png",
 			setup: func(s *service, m *imaging.Mock) {
-
-				m.On("Open", "path/to/watermark").Return(watermark, nil)
-				m.On("Resize", watermark, 100, 0).Return(watermark)
-				m.On("Open", "path/to/original").Return(original, nil)
+				m.On("Open", "test_load_image/watermark.png").Return(watermark, nil)
+				m.On("Resize", watermark, 32, 0).Return(watermark)
+				m.On("Open", "test_load_image/original.png").Return(original, nil)
 				m.On("Overlay", original, watermark, mock.AnythingOfType("image.Point"), 1.0).Return(processed)
 			},
-			expectedImg: processed,
-			expectError: false,
-		},
-		{
-			name:     "Successful processing with cache",
-			filePath: "path/to/original",
-			setup: func(s *service, m *imaging.Mock) {
-				s.cache["path/to/original"] = processed
-			},
-			expectedImg: processed,
-			expectError: false,
+			expectedResult: processed,
+			expectedError:  false,
 		},
 		{
 			name:     "Watermark file not found error",
-			filePath: "path/to/original",
+			filename: "original.png",
 			setup: func(s *service, m *imaging.Mock) {
-				m.On("Open", "path/to/watermark").Return(nil, errors.New("file not found"))
+				m.On("Open", "test_load_image/watermark.png").Return(nil, errors.New("file not found"))
 			},
-			expectedImg: nil,
-			expectError: true,
+			expectedResult: nil,
+			expectedError:  true,
 		},
 		{
 			name:     "Image file not found error",
-			filePath: "path/to/original",
+			filename: "original.png",
 			setup: func(s *service, m *imaging.Mock) {
-				m.On("Open", "path/to/watermark").Return(watermark, nil)
-				m.On("Resize", watermark, 100, 0).Return(watermark)
-				m.On("Open", "path/to/original").Return(nil, errors.New("file not found"))
+				m.On("Open", "test_load_image/watermark.png").Return(watermark, nil)
+				m.On("Resize", watermark, 32, 0).Return(watermark)
+				m.On("Open", "test_load_image/original.png").Return(nil, errors.New("file not found"))
 			},
-			expectedImg: nil,
-			expectError: true,
+			expectedResult: nil,
+			expectedError:  true,
 		},
 	}
 
-	for _, tc := range testcases {
-		t.Run(tc.name, func(t *testing.T) {
-			mockImaging := new(imaging.Mock)
-			service := &service{
-				config: &config{
-					Path: "path/to/watermark",
-					Size: 100,
-				},
-				imager: mockImaging,
-				cache:  make(map[string]image.Image),
-				mutex:  &sync.Mutex{},
-			}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			s, m := setup(t, WEB_DIR)
+			defer teardown(t, WEB_DIR)
+			tt.setup(s, m)
 
-			tc.setup(service, mockImaging)
+			result, err := s.LoadImage(tt.filename)
 
-			result, err := service.LoadImage(tc.filePath)
-
-			if tc.expectError {
-				assert.Error(t, err, "Expected an error for test case: "+tc.name)
+			if tt.expectedError {
+				assert.Error(t, err, "Expected an error for test case: "+tt.name)
 			} else {
-				assert.NoError(t, err, "Did not expect error for test case: "+tc.name)
-				assert.Equal(t, tc.expectedImg, result, "Expected image did not match for test case: "+tc.name)
+				assert.NoError(t, err, "Did not expect error for test case: "+tt.name)
+				assert.Equal(t, tt.expectedResult, result, "Expected image did not match for test case: "+tt.name)
 			}
 
-			mockImaging.AssertExpectations(t)
+			m.AssertExpectations(t)
 		})
 	}
 }

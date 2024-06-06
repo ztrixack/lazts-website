@@ -13,13 +13,13 @@ func TestGet(t *testing.T) {
 	const CONTENT_DIR = "test_get"
 
 	tests := []struct {
-		name          string
-		offset        uint
-		limit         uint
-		tag           string
-		expectedError bool
-		expectedMemos []models.Memo
-		setup         func(t *testing.T, mock *markdown.Mock)
+		name            string
+		offset          uint
+		limit           uint
+		tag             string
+		expectedError   bool
+		expectedResults []models.Memo
+		setup           func(t *testing.T, mock *markdown.Mock)
 	}{
 		{
 			name:          "Successful retrieval with offset and limit",
@@ -27,7 +27,7 @@ func TestGet(t *testing.T) {
 			limit:         10,
 			tag:           "",
 			expectedError: false,
-			expectedMemos: []models.Memo{
+			expectedResults: []models.Memo{
 				{
 					Title:         "title",
 					Excerpt:       "excerpt",
@@ -62,22 +62,22 @@ func TestGet(t *testing.T) {
 			},
 		},
 		{
-			name:          "Directory does not exist",
-			offset:        0,
-			limit:         10,
-			tag:           "",
-			expectedError: true,
-			expectedMemos: nil,
+			name:            "Directory does not exist",
+			offset:          0,
+			limit:           10,
+			tag:             "",
+			expectedError:   true,
+			expectedResults: nil,
 			setup: func(t *testing.T, mock *markdown.Mock) {
 			},
 		},
 		{
-			name:          "Metadata retrieval error",
-			offset:        0,
-			limit:         1,
-			tag:           "",
-			expectedError: true,
-			expectedMemos: nil,
+			name:            "Metadata retrieval error",
+			offset:          0,
+			limit:           1,
+			tag:             "",
+			expectedError:   true,
+			expectedResults: nil,
 			setup: func(t *testing.T, mock *markdown.Mock) {
 				utils.CreateTestFile(t, CONTENT_DIR, "memos/slug-1/index.md", "")
 
@@ -90,7 +90,7 @@ func TestGet(t *testing.T) {
 			limit:         10,
 			tag:           "tag2",
 			expectedError: false,
-			expectedMemos: []models.Memo{
+			expectedResults: []models.Memo{
 				{
 					Title:         "title",
 					Excerpt:       "excerpt",
@@ -140,7 +140,7 @@ func TestGet(t *testing.T) {
 				assert.Error(t, err, "Expected an error but did not get one")
 			} else {
 				assert.NoError(t, err, "Did not expect an error but got one")
-				assert.ElementsMatch(t, tt.expectedMemos, memos, "Expected and actual memos do not match")
+				assert.ElementsMatch(t, tt.expectedResults, memos, "Expected and actual memos do not match")
 			}
 
 			m.AssertExpectations(t)

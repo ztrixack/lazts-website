@@ -2,6 +2,7 @@ package watermark
 
 import (
 	"image"
+	"lazts/internal/modules/cache"
 	"lazts/internal/modules/imaging"
 	"sync"
 )
@@ -13,7 +14,7 @@ type Servicer interface {
 type service struct {
 	config *config
 	imager imaging.Moduler
-	cache  map[string]image.Image
+	cache  cache.Moduler
 	mutex  *sync.Mutex
 }
 
@@ -23,7 +24,7 @@ func New(imager imaging.Moduler) *service {
 	return &service{
 		config: parseConfig(),
 		imager: imager,
-		cache:  make(map[string]image.Image),
+		cache:  cache.New(),
 		mutex:  &sync.Mutex{},
 	}
 }

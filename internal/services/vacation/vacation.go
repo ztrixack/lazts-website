@@ -2,6 +2,7 @@ package vacation
 
 import (
 	"lazts/internal/models"
+	"lazts/internal/modules/cache"
 	"lazts/internal/modules/markdown"
 )
 
@@ -12,8 +13,7 @@ type Servicer interface {
 
 type service struct {
 	config     *config
-	cache      map[string][]models.Vacation
-	size       int
+	cache      cache.Moduler
 	markdowner markdown.Moduler
 }
 
@@ -22,8 +22,7 @@ var _ Servicer = (*service)(nil)
 func New(mm markdown.Moduler) *service {
 	return &service{
 		config:     parseConfig(),
-		cache:      make(map[string][]models.Vacation),
-		size:       0,
+		cache:      cache.New(),
 		markdowner: mm,
 	}
 }
