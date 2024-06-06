@@ -4,6 +4,7 @@ import (
 	"errors"
 	"image"
 	"lazts/internal/modules/imaging"
+	"lazts/internal/utils"
 	"sync"
 	"testing"
 
@@ -16,6 +17,10 @@ func TestLoadImageTableDriven(t *testing.T) {
 	original := image.NewNRGBA(image.Rect(0, 0, 800, 600))
 	processed := image.NewNRGBA(image.Rect(0, 0, 800, 600))
 
+	utils.CreateTestFile(t, "path/to", "original", "some content")
+	utils.CreateTestFile(t, "path/to", "watermark", "some content")
+	defer utils.RemoveTestDir(t, "path")
+
 	testcases := []struct {
 		name        string
 		filePath    string
@@ -27,6 +32,7 @@ func TestLoadImageTableDriven(t *testing.T) {
 			name:     "Successful processing",
 			filePath: "path/to/original",
 			setup: func(s *service, m *imaging.Mock) {
+
 				m.On("Open", "path/to/watermark").Return(watermark, nil)
 				m.On("Resize", watermark, 100, 0).Return(watermark)
 				m.On("Open", "path/to/original").Return(original, nil)

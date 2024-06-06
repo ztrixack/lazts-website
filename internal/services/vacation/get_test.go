@@ -22,7 +22,10 @@ func TestGet(t *testing.T) {
 			name:       "Successful listing",
 			contentDir: "test_content",
 			setup: func(t *testing.T, dir string, mock *markdown.Mock) {
-				mock.On("ToMetadata", dir+"/vacations/0000-slug/index.md").Return(map[string]interface{}{
+				utils.CreateTestFile(t, dir, "vacations/0000-slug/index.md", "some content")
+
+				mock.On("ReadFile", "0000-slug", dir+"/vacations/0000-slug/index.md").Return([]byte{}, nil).Once()
+				mock.On("ToMetadata", "0000-slug", []byte{}).Return(map[string]interface{}{
 					"title":           "title",
 					"slug":            "0000-slug",
 					"excerpt":         "excerpt",
@@ -34,7 +37,6 @@ func TestGet(t *testing.T) {
 					"published":       true,
 					"last_updated_at": "2024-05-23",
 				}, nil).Once()
-				utils.CreateTestFile(t, dir, "vacations/0000-slug/index.md", "some content")
 			},
 			expectedVacations: []models.Vacation{
 				{

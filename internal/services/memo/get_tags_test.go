@@ -30,9 +30,12 @@ func TestGetTags(t *testing.T) {
 				utils.CreateTestFile(t, dir, "memos/00000000-slug-2/index.md", "some content")
 				utils.CreateTestFile(t, dir, "memos/00000000-slug-3/index.md", "some content")
 
-				mock.On("ToMetadata", dir+"/memos/00000000-slug-1/index.md").Return(map[string]interface{}{"tags": []string{"A"}}, nil).Once()
-				mock.On("ToMetadata", dir+"/memos/00000000-slug-2/index.md").Return(map[string]interface{}{"tags": []string{"A", "B"}}, nil).Once()
-				mock.On("ToMetadata", dir+"/memos/00000000-slug-3/index.md").Return(map[string]interface{}{"tags": []string{"C", "D"}}, nil).Once()
+				mock.On("ReadFile", "00000000-slug-1", dir+"/memos/00000000-slug-1/index.md").Return([]byte{}, nil).Once()
+				mock.On("ToMetadata", "00000000-slug-1", []byte{}).Return(map[string]interface{}{"tags": []string{"A"}}, nil).Once()
+				mock.On("ReadFile", "00000000-slug-2", dir+"/memos/00000000-slug-2/index.md").Return([]byte{}, nil).Once()
+				mock.On("ToMetadata", "00000000-slug-2", []byte{}).Return(map[string]interface{}{"tags": []string{"A", "B"}}, nil).Once()
+				mock.On("ReadFile", "00000000-slug-3", dir+"/memos/00000000-slug-3/index.md").Return([]byte{}, nil).Once()
+				mock.On("ToMetadata", "00000000-slug-3", []byte{}).Return(map[string]interface{}{"tags": []string{"C", "D"}}, nil).Once()
 			},
 			teardown: func(t *testing.T, dir string) {
 				os.Unsetenv("CONTENT_DIR")

@@ -1,0 +1,13 @@
+<section class="container mx-auto">
+  <div name="title" class="my-16 h-full w-full" id="title">
+    {{template "memo-header" .}}
+  </div>
+</section>
+
+<section class="container mx-auto text-slate-900 dark:text-slate-100">
+  <article name="article" class="min-h-screen w-full" id="article">
+    {{template "markdown" .}}
+  </article>
+</section>
+
+<section>{{template "comments.html" .}}</section>

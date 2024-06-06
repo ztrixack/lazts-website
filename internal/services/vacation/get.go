@@ -34,7 +34,13 @@ func (s *service) Get(location string) ([]models.Vacation, error) {
 			return
 		}
 
-		metadata, err := s.markdowner.ToMetadata(filepath.Join(s.config.ContentDir, "vacations", dir.Name(), "index.md"))
+		filedata, err := s.markdowner.ReadFile(dir.Name(), filepath.Join(s.config.ContentDir, "vacations", dir.Name(), "index.md"))
+		if err != nil {
+			errChan <- err
+			return
+		}
+
+		metadata, err := s.markdowner.ToMetadata(dir.Name(), filedata)
 		if err != nil {
 			errChan <- err
 			return

@@ -8,8 +8,9 @@ import (
 var mermaidJSSource string
 
 type Moduler interface {
-	ToHTML(filepath string) (string, error)
-	ToMetadata(filepath string) (map[string]interface{}, error)
+	ReadFile(name string, filepath string) ([]byte, error)
+	ToHTML(name string, data []byte) (string, error)
+	ToMetadata(name string, data []byte) (map[string]interface{}, error)
 }
 
 type module struct {

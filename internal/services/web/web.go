@@ -14,7 +14,7 @@ import (
 type Servicer interface {
 	RenderPage(w io.Writer, path string, data map[string]interface{}) error
 	RenderPartial(w io.Writer, path string, data map[string]interface{}) error
-	RenderMarkdown(w io.Writer, path string, data map[string]interface{}) error
+	RenderMarkdown(w io.Writer, path string, content string, data map[string]interface{}) error
 }
 
 type service struct {
@@ -54,8 +54,8 @@ func (m *service) injectData(data map[string]interface{}) map[string]interface{}
 		data = make(map[string]interface{})
 	}
 
-	data["Title"] = m.config.Title
-	data["Excerpt"] = m.config.Excerpt
-	data["Year"] = time.Now().Year()
+	data["XTitle"] = m.config.Title
+	data["XExcerpt"] = m.config.Excerpt
+	data["XYear"] = time.Now().Year()
 	return data
 }

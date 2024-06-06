@@ -2,13 +2,11 @@ package markdown
 
 import (
 	"bytes"
-	"os"
 	"strings"
 
 	katex "github.com/FurqanSoftware/goldmark-katex"
 	chromahtml "github.com/alecthomas/chroma/v2/formatters/html"
 	figure "github.com/mangoumbrella/goldmark-figure"
-	"github.com/rs/zerolog/log"
 	"github.com/yuin/goldmark"
 	emoji "github.com/yuin/goldmark-emoji"
 	_ "github.com/yuin/goldmark-emoji/definition"
@@ -22,18 +20,10 @@ import (
 	"go.abhg.dev/goldmark/toc"
 )
 
-func (m *module) ToHTML(path string) (string, error) {
-	log.Debug().Str("path", path).Msg("converting to HTML")
-	cpach := "html_" + path
-
-	if data, ok := m.cache[cpach].(string); data != "" && ok {
-		log.Debug().Str("path", path).Msg("returning cached HTML for path")
+func (m *module) ToHTML(name string, data []byte) (string, error) {
+	KEY := "HTML-" + name
+	if data, ok := m.cache[KEY].(string); data != "" && ok {
 		return data, nil
-	}
-
-	content, err := os.ReadFile(path)
-	if err != nil {
-		return "", err
 	}
 
 	context := parser.NewContext()
@@ -60,11 +50,11 @@ func (m *module) ToHTML(path string) (string, error) {
 	)
 
 	buf := bytes.Buffer{}
-	if err := markdown.Convert(content, &buf, parser.WithContext(context)); err != nil {
+	if err := markdown.Convert(data, &buf, parser.WithContext(context)); err != nil {
 		return "", err
 	}
 	result := strings.TrimSpace(buf.String())
-	m.cache[cpach] = result
+	m.cache[KEY] = result
 
 	return result, nil
 }

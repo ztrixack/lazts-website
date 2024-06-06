@@ -1,7 +1,10 @@
 package web
 
 import (
+	"fmt"
 	"io"
+	"lazts/internal/models"
+	"lazts/internal/utils"
 	"os"
 	"path/filepath"
 	"strings"
@@ -9,8 +12,8 @@ import (
 	"github.com/rs/zerolog/log"
 )
 
-func (m *service) RenderMarkdown(w io.Writer, path string, data map[string]interface{}) error {
-	log.Debug().Str("path", path).Msg("markdown rendering")
+func (m *service) RenderMarkdown(w io.Writer, name string, content string, data map[string]interface{}) error {
+	log.Debug().Str("path", name).Msg("markdown rendering")
 
 	tmpl, err := m.templates.Clone()
 	if err != nil {
@@ -18,10 +21,7 @@ func (m *service) RenderMarkdown(w io.Writer, path string, data map[string]inter
 		return ErrCloneTemplates
 	}
 
-	pagename := strings.Split(strings.TrimPrefix(path, "/"), "/")[0]
-	filename := pagename + "_content.html"
-
-	page, err := os.ReadFile(filepath.Join(m.config.Dir, "templates/pages", filename))
+	page, err := os.ReadFile(filepath.Join(m.config.Dir, "templates/pages", fmt.Sprintf("%s.html", name)))
 	if err != nil {
 		log.Error().Err(err).Msg("failed to read file")
 		return ErrNotFound
@@ -31,7 +31,14 @@ func (m *service) RenderMarkdown(w io.Writer, path string, data map[string]inter
 		return ErrParseContent
 	}
 
-	htmlContent, err := m.markdown.ToHTML(filepath.Join(m.config.Dir, "contents", path, "page.md"))
+	filepath := filepath.Join(m.config.Dir, "contents", strings.Split(name, "-")[0], content, "index.md")
+	filedata, err := m.markdown.ReadFile(content, filepath)
+	if err != nil {
+		log.Error().Err(err).Msg("failed to read file")
+		return ErrNotFound
+	}
+
+	htmlContent, err := m.markdown.ToHTML(content, filedata)
 	if err != nil {
 		log.Error().Err(err).Msg("failed to convert markdown to html")
 		return ErrConvertMarkdown
@@ -40,6 +47,25 @@ func (m *service) RenderMarkdown(w io.Writer, path string, data map[string]inter
 		log.Error().Err(err).Msg("failed to parse content")
 		return ErrParseContent
 	}
+
+	metadata, err := m.markdown.ToMetadata(content, filedata)
+	if err != nil {
+		log.Error().Err(err).Msg("failed to get metadata")
+		return err
+	}
+	var metamemo models.MemoMetadata
+	if err := utils.ToStruct(metadata, &metamemo); err != nil {
+		return err
+	}
+	memo := metamemo.ToMemo()
+
+	data["Title"] = memo.Title
+	data["Published"] = memo.DateTimeReadable
+	data["PublishedISO"] = memo.DateTimeISO
+	data["LastUpdated"] = memo.LastUpdatedReadable
+	data["LastUpdatedISO"] = memo.LastUpdatedISO
+	data["ReadTime"] = memo.ReadTime
+	data["Tags"] = memo.Tags
 
 	return tmpl.ExecuteTemplate(w, "base", m.injectData(data))
 }

@@ -19,7 +19,7 @@ func TestWeb_RenderPage(t *testing.T) {
 	defer os.Unsetenv("WEB_TITLE")
 	defer utils.RemoveTestDir(t, testDir)
 
-	utils.CreateTestFile(t, filepath.Join(testDir, "templates", "layouts"), "base.html", `{{define "base"}}<html><head><title>{{.Title}}</title></head><body>{{template "content" .}}</body></html>{{end}}`)
+	utils.CreateTestFile(t, filepath.Join(testDir, "templates", "layouts"), "base.html", `{{define "base"}}<html><head></head><body>{{template "content" .}}</body></html>{{end}}`)
 	utils.CreateTestFile(t, filepath.Join(testDir, "templates", "pages"), "home.html", `<h2>Home</h2><p>This is the home page.</p>`)
 	utils.CreateTestFile(t, filepath.Join(testDir, "templates", "pages"), "blog.html", `<h2>Blog</h2><p>This is the blog page.</p>`)
 
@@ -34,13 +34,13 @@ func TestWeb_RenderPage(t *testing.T) {
 		{
 			name:      "Render template",
 			path:      "blog",
-			want:      `<html><head><title>test_title</title></head><body><h2>Blog</h2><p>This is the blog page.</p></body></html>`,
+			want:      `<html><head></head><body><h2>Blog</h2><p>This is the blog page.</p></body></html>`,
 			expectErr: false,
 		},
 		{
 			name:      "Render home template",
 			path:      "home",
-			want:      `<html><head><title>test_title</title></head><body><h2>Home</h2><p>This is the home page.</p></body></html>`,
+			want:      `<html><head></head><body><h2>Home</h2><p>This is the home page.</p></body></html>`,
 			expectErr: false,
 		},
 		{

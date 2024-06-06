@@ -23,18 +23,18 @@ type MemoMetadata struct {
 }
 
 type Memo struct {
-	Title              string
-	Excerpt            string
-	FeaturedImage      string
-	Link               string
-	Tags               []Tag
-	ReadTime           int
-	DateTimeISO        string
-	DateTimeReadable   string
-	LastUpdatedISO     string
-	LastUpdateReadable string
-	DayMonth           string
-	Year               string
+	Title               string
+	Excerpt             string
+	FeaturedImage       string
+	Link                string
+	Tags                []Tag
+	ReadTime            int
+	DateTimeISO         string
+	DateTimeReadable    string
+	LastUpdatedISO      string
+	LastUpdatedReadable string
+	DayMonth            string
+	Year                string
 }
 
 type Tag struct {
@@ -58,19 +58,18 @@ func (m MemoMetadata) ToMemo() Memo {
 	}
 
 	return Memo{
-
-		Title:              m.Title,
-		Excerpt:            m.Excerpt,
-		FeaturedImage:      utils.UpdateFeaturedImagePaths(filepath.Join("/static/contents/memos", m.Slug), m.FeaturedImage),
-		Link:               link,
-		Tags:               ToTags(m.Tags),
-		ReadTime:           m.ReadTime,
-		DateTimeISO:        publishedAt.Format(time.RFC3339),
-		DateTimeReadable:   utils.ToYearMonthDay(publishedAt),
-		LastUpdatedISO:     lastUpdatedAt.Format(time.RFC3339),
-		LastUpdateReadable: utils.ToYearMonthDay(lastUpdatedAt),
-		DayMonth:           utils.ToDayMonth(publishedAt),
-		Year:               fmt.Sprintf("%d", publishedAt.Year()),
+		Title:               m.Title,
+		Excerpt:             m.Excerpt,
+		FeaturedImage:       utils.UpdateFeaturedImagePaths(filepath.Join("/static/contents/memos", m.Slug), m.FeaturedImage),
+		Link:                link,
+		Tags:                ToTags(m.Tags),
+		ReadTime:            m.ReadTime,
+		DateTimeISO:         publishedAt.Format(time.RFC3339),
+		DateTimeReadable:    utils.ToYearMonthDay(publishedAt),
+		LastUpdatedISO:      lastUpdatedAt.Format(time.RFC3339),
+		LastUpdatedReadable: utils.ToYearMonthDay(lastUpdatedAt),
+		DayMonth:            utils.ToDayMonth(publishedAt),
+		Year:                fmt.Sprintf("%d", publishedAt.Year()),
 	}
 }
 

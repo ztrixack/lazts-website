@@ -12,8 +12,8 @@ type Mock struct {
 
 var _ Servicer = (*Mock)(nil)
 
-func (m *Mock) RenderMarkdown(w io.Writer, path string, data map[string]interface{}) error {
-	ret := m.Called(w, path, data)
+func (m *Mock) RenderMarkdown(w io.Writer, path string, content string, data map[string]interface{}) error {
+	ret := m.Called(w, path, content, data)
 	return ret.Error(0)
 }
 

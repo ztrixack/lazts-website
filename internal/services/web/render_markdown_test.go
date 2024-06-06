@@ -14,7 +14,7 @@ import (
 func TestWeb_RenderMarkdown(t *testing.T) {
 	testDir := "test_data"
 	testTitle := "test_title"
-	markdownMock := new(markdown.Mock)
+	mock := new(markdown.Mock)
 
 	os.Setenv("WEB_DIR", testDir)
 	os.Setenv("WEB_TITLE", testTitle)
@@ -22,57 +22,68 @@ func TestWeb_RenderMarkdown(t *testing.T) {
 	defer os.Unsetenv("WEB_TITLE")
 	defer utils.RemoveTestDir(t, testDir)
 
-	utils.CreateTestFile(t, filepath.Join(testDir, "templates", "layouts"), "base.html", `{{define "base"}}<html><head><title>{{.Title}}</title></head><body>{{template "content" .}}</body></html>{{end}}`)
-	utils.CreateTestFile(t, filepath.Join(testDir, "templates", "pages"), "blog_content.html", `<h2>Blog</h2><article>{{template "markdown" .}}</article>`)
+	utils.CreateTestFile(t, filepath.Join(testDir, "templates", "layouts"), "base.html", `{{define "base"}}<html><head></head><body>{{template "content" .}}</body></html>{{end}}`)
+	utils.CreateTestFile(t, filepath.Join(testDir, "templates", "pages"), "blog-content.html", `<h2>Blog</h2><article>{{template "markdown" .}}</article>`)
 
-	r := New(markdownMock)
+	r := New(mock)
 
 	tests := []struct {
 		name      string
 		path      string
+		content   string
 		setup     func()
 		want      string
 		expectErr bool
 	}{
 		{
-			name: "Render template",
-			path: "/blog/sample",
+			name:    "Render template",
+			path:    "blog-content",
+			content: "sample",
 			setup: func() {
-				markdownMock.On("ToHTML", filepath.Join(testDir, "contents", "blog", "sample", "page.md")).Return(`<h1>Blog Page 1</h1>`, nil).Once()
+				mock.On("ReadFile", "sample", testDir+"/contents/blog/sample/index.md").Return([]byte{}, nil).Once()
+				mock.On("ToHTML", "sample", []byte{}).Return(`<h1>Blog Page 1</h1>`, nil).Once()
+				mock.On("ToMetadata", "sample", []byte{}).Return(map[string]interface{}{}, nil).Once()
 			},
-			want:      `<html><head><title>test_title</title></head><body><h2>Blog</h2><article><h1>Blog Page 1</h1></article></body></html>`,
+			want:      `<html><head></head><body><h2>Blog</h2><article><h1>Blog Page 1</h1></article></body></html>`,
 			expectErr: false,
 		},
 		{
-			name: "Render template with error",
-			path: "/blog/sample",
+			name:    "Render template with error",
+			path:    "blog-content",
+			content: "sample",
 			setup: func() {
-				markdownMock.On("ToHTML", filepath.Join(testDir, "contents", "blog", "sample", "page.md")).Return("", assert.AnError).Once()
+				mock.On("ReadFile", "sample", testDir+"/contents/blog/sample/index.md").Return([]byte{}, nil).Once()
+				mock.On("ToHTML", "sample", []byte{}).Return("", assert.AnError).Once()
 			},
 			expectErr: true,
 		},
 		{
-			name: "Render template with no content",
-			path: "/blog/sample",
+			name:    "Render template with no content",
+			path:    "blog-content",
+			content: "sample",
 			setup: func() {
-				markdownMock.On("ToHTML", filepath.Join(testDir, "contents", "blog", "sample", "page.md")).Return("", nil).Once()
+				mock.On("ReadFile", "sample", testDir+"/contents/blog/sample/index.md").Return([]byte{}, nil).Once()
+				mock.On("ToHTML", "sample", []byte{}).Return("", nil).Once()
+				mock.On("ToMetadata", "sample", []byte{}).Return(map[string]interface{}{}, nil).Once()
 			},
-			want:      `<html><head><title>test_title</title></head><body><h2>Blog</h2><article></article></body></html>`,
+			want:      `<html><head></head><body><h2>Blog</h2><article></article></body></html>`,
 			expectErr: false,
 		},
 		{
-			name: "Render not found template",
-			path: "/blog/nonexist",
+			name:    "Render not found template",
+			path:    "blog-content",
+			content: "nonexist",
 			setup: func() {
-				markdownMock.On("ToHTML", filepath.Join(testDir, "contents", "blog", "nonexist", "page.md")).Return("", assert.AnError).Once()
+				mock.On("ReadFile", "nonexist", testDir+"/contents/blog/nonexist/index.md").Return([]byte{}, nil).Once()
+				mock.On("ToHTML", "nonexist", []byte{}).Return("", assert.AnError).Once()
 			},
 			expectErr: true,
 		},
 		{
-			name: "Render with invalid path",
-			path: "/blog/../sample",
+			name:    "Render with invalid path",
+			path:    "",
+			content: "sample",
 			setup: func() {
-				markdownMock.On("ToHTML", filepath.Join(testDir, "contents", "sample", "page.md")).Return("", assert.AnError).Once()
 			},
 			expectErr: true,
 		},
@@ -82,7 +93,7 @@ func TestWeb_RenderMarkdown(t *testing.T) {
 		t.Run(tt.name, func(t *testing.T) {
 			var buf bytes.Buffer
 			tt.setup()
-			err := r.RenderMarkdown(&buf, tt.path, nil)
+			err := r.RenderMarkdown(&buf, tt.path, tt.content, map[string]interface{}{})
 			if tt.expectErr {
 				assert.Error(t, err, "expected an error but got none")
 			} else {
@@ -90,7 +101,7 @@ func TestWeb_RenderMarkdown(t *testing.T) {
 			}
 
 			assert.Equal(t, tt.want, buf.String(), "unexpected output from rendering")
-			markdownMock.AssertExpectations(t)
+			mock.AssertExpectations(t)
 		})
 	}
 }

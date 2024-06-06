@@ -40,7 +40,8 @@ func TestGet(t *testing.T) {
 				os.Setenv("CONTENT_DIR", dir)
 				utils.CreateTestFile(t, dir, "memos/00000000-slug-1/index.md", "some content")
 
-				mock.On("ToMetadata", dir+"/memos/00000000-slug-1/index.md").Return(content, nil).Once()
+				mock.On("ReadFile", "00000000-slug-1", dir+"/memos/00000000-slug-1/index.md").Return([]byte{}, nil).Once()
+				mock.On("ToMetadata", "00000000-slug-1", []byte{}).Return(content, nil).Once()
 			},
 			teardown: func(t *testing.T, dir string) {
 				os.Unsetenv("CONTENT_DIR")
@@ -59,13 +60,13 @@ func TestGet(t *testing.T) {
 						{Name: "tag1", Link: "/memos/tag1", Count: 1},
 						{Name: "tag2", Link: "/memos/tag2", Count: 1},
 					},
-					DateTimeISO:        "2017-01-01T00:00:00Z",
-					DateTimeReadable:   "01 มกราคม 2017",
-					LastUpdatedISO:     "2024-05-23T00:00:00Z",
-					LastUpdateReadable: "23 พฤษภาคม 2024",
-					DayMonth:           "01 Jan",
-					Year:               "2017",
-					ReadTime:           0,
+					DateTimeISO:         "2017-01-01T00:00:00Z",
+					DateTimeReadable:    "01 มกราคม 2017",
+					LastUpdatedISO:      "2024-05-23T00:00:00Z",
+					LastUpdatedReadable: "23 พฤษภาคม 2024",
+					DayMonth:            "01 Jan",
+					Year:                "2017",
+					ReadTime:            0,
 				},
 			},
 			expectedError: false,
@@ -93,7 +94,8 @@ func TestGet(t *testing.T) {
 				os.Setenv("CONTENT_DIR", dir)
 				utils.CreateTestFile(t, dir, "memos/00000000-slug-1/index.md", "some content")
 
-				mock.On("ToMetadata", dir+"/memos/00000000-slug-1/index.md").Return(map[string]interface{}{}, assert.AnError).Once()
+				mock.On("ReadFile", "00000000-slug-1", dir+"/memos/00000000-slug-1/index.md").Return([]byte{}, nil).Once()
+				mock.On("ToMetadata", "00000000-slug-1", []byte{}).Return(map[string]interface{}{}, assert.AnError).Once()
 			},
 			teardown: func(t *testing.T, dir string) {
 				os.Unsetenv("CONTENT_DIR")
@@ -113,8 +115,10 @@ func TestGet(t *testing.T) {
 				utils.CreateTestFile(t, dir, "memos/00000000-slug-1/index.md", "some content")
 				utils.CreateTestFile(t, dir, "memos/00000000-slug-2/index.md", "some content")
 
-				mock.On("ToMetadata", dir+"/memos/00000000-slug-1/index.md").Return(content, nil).Once()
-				mock.On("ToMetadata", dir+"/memos/00000000-slug-2/index.md").Return(map[string]interface{}{"tag": []string{"tag1"}}, nil).Once()
+				mock.On("ReadFile", "00000000-slug-1", dir+"/memos/00000000-slug-1/index.md").Return([]byte{}, nil).Once()
+				mock.On("ToMetadata", "00000000-slug-1", []byte{}).Return(content, nil).Once()
+				mock.On("ReadFile", "00000000-slug-2", dir+"/memos/00000000-slug-2/index.md").Return([]byte{}, nil).Once()
+				mock.On("ToMetadata", "00000000-slug-2", []byte{}).Return(map[string]interface{}{"tag": []string{"tag1"}}, nil).Once()
 			},
 			teardown: func(t *testing.T, dir string) {
 				os.Unsetenv("CONTENT_DIR")
@@ -133,13 +137,13 @@ func TestGet(t *testing.T) {
 						{Name: "tag1", Link: "/memos/tag1", Count: 1},
 						{Name: "tag2", Link: "/memos/tag2", Count: 1},
 					},
-					DateTimeISO:        "2017-01-01T00:00:00Z",
-					DateTimeReadable:   "01 มกราคม 2017",
-					LastUpdatedISO:     "2024-05-23T00:00:00Z",
-					LastUpdateReadable: "23 พฤษภาคม 2024",
-					DayMonth:           "01 Jan",
-					Year:               "2017",
-					ReadTime:           0,
+					DateTimeISO:         "2017-01-01T00:00:00Z",
+					DateTimeReadable:    "01 มกราคม 2017",
+					LastUpdatedISO:      "2024-05-23T00:00:00Z",
+					LastUpdatedReadable: "23 พฤษภาคม 2024",
+					DayMonth:            "01 Jan",
+					Year:                "2017",
+					ReadTime:            0,
 				},
 			},
 			expectedError: false,
