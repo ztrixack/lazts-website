@@ -1,6 +1,7 @@
 package memo
 
 import (
+	"fmt"
 	"lazts/internal/models"
 	"lazts/internal/utils"
 	"os"
@@ -10,8 +11,9 @@ import (
 )
 
 func (s *service) Get(offset uint, limit uint) ([]models.Memo, error) {
-	if len(s.cache) != 0 {
-		return s.cache, nil
+	cpath := fmt.Sprintf("%d-%d", offset, limit)
+	if s.cache[cpath] != nil {
+		return s.cache[cpath], nil
 	}
 
 	dirs, err := os.ReadDir(filepath.Join(s.config.ContentDir, "memos"))
@@ -83,6 +85,6 @@ func (s *service) Get(offset uint, limit uint) ([]models.Memo, error) {
 
 	sort.Sort(models.MemoSort(memos))
 
-	s.cache = memos
+	s.cache[cpath] = memos
 	return memos, nil
 }

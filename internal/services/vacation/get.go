@@ -11,8 +11,9 @@ import (
 )
 
 func (s *service) Get(location string) ([]models.Vacation, error) {
-	if len(s.cache) != 0 {
-		return s.cache, nil
+	cpath := location
+	if s.cache[cpath] != nil {
+		return s.cache[cpath], nil
 	}
 
 	dirs, err := os.ReadDir(filepath.Join(s.config.ContentDir, "vacations"))
@@ -66,6 +67,6 @@ func (s *service) Get(location string) ([]models.Vacation, error) {
 
 	sort.Sort(models.VacationSort(vacations))
 
-	s.cache = vacations
+	s.cache[cpath] = vacations
 	return vacations, nil
 }

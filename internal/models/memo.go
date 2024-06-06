@@ -52,13 +52,17 @@ func (m MemoMetadata) ToMemo() Memo {
 	if err != nil {
 		lastUpdatedAt = time.Now()
 	}
+	link := filepath.Join("/memos/main", m.Slug)
+	if len(m.Tags) > 0 {
+		link = filepath.Join("/memos", m.Tags[0], m.Slug)
+	}
 
 	return Memo{
 
 		Title:              m.Title,
 		Excerpt:            m.Excerpt,
 		FeaturedImage:      utils.UpdateFeaturedImagePaths(filepath.Join("/static/contents/memos", m.Slug), m.FeaturedImage),
-		Link:               filepath.Join("/memos", m.Tags[0], m.Slug),
+		Link:               link,
 		Tags:               ToTags(m.Tags),
 		ReadTime:           m.ReadTime,
 		DateTimeISO:        publishedAt.Format(time.RFC3339),
