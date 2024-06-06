@@ -43,5 +43,6 @@ func (h *handler) setRouter(m http.Moduler) {
 	m.Get("/memos/{group}", h.MemosGroups)
 	m.Get("/memos/{group}/{content}", h.MemosGroupsContents)
 	m.Get("/vacations", h.Vacations)
+	m.Get("/vacations/{content}", h.VacationsContents)
 	m.Get("/", h.Home)
 }

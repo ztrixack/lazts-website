@@ -1,5 +1,5 @@
 ---
-title: Takayama - Hokuriku on Railway
+title: Takayama Hokuriku on Railway
 slug: 2019-takayama-hokuriku
 excerpt: ทัวร์ drop ของ ที่จะลืมเอานั่น นู่น นี่ไปด้วยเกือบทุกวัน ตามเส้นทางรถไฟสาย Takayama - Hokuriku
 location: Japan

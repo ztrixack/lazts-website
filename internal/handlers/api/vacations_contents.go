@@ -5,14 +5,12 @@ import (
 	"lazts/internal/models"
 	"lazts/internal/models/types"
 	"net/http"
-	"path/filepath"
-	"strings"
 
 	"github.com/gorilla/mux"
 	"github.com/rs/zerolog/log"
 )
 
-func (h *handler) MemosGroupsContents(w http.ResponseWriter, r *http.Request) {
+func (h *handler) VacationsContents(w http.ResponseWriter, r *http.Request) {
 	params := mux.Vars(r)
 	data := make(map[string]interface{})
 	data["Menu"] = DEFAULT_MENU
@@ -23,10 +21,10 @@ func (h *handler) MemosGroupsContents(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	data["Breadcrumbs"] = toMemoBreadcrumbs(params["group"])
+	data["Breadcrumbs"] = toVacationBreadcrumbs()
 
 	var buf bytes.Buffer
-	if err := h.webber.RenderMarkdown(&buf, "memos-groups-contents", params["content"], data); err != nil {
+	if err := h.webber.RenderMarkdown(&buf, "vacations-contents", params["content"], data); err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
@@ -41,19 +39,15 @@ func (h *handler) MemosGroupsContents(w http.ResponseWriter, r *http.Request) {
 	w.Write(minifiedHTML)
 }
 
-func toMemoBreadcrumbs(tag string) []models.Tag {
+func toVacationBreadcrumbs() []models.Tag {
 	return []models.Tag{
 		{
 			Name: "Home",
 			Link: "/",
 		},
 		{
-			Name: "Memos",
-			Link: "/memos",
-		},
-		{
-			Name: strings.ToUpper(string(tag[0])) + tag[1:],
-			Link: filepath.Join("/", "memos", tag),
+			Name: "Vacations",
+			Link: "/vacations",
 		},
 	}
 }
