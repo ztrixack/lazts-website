@@ -8,7 +8,7 @@ import (
 )
 
 func setup(t *testing.T) *module {
-	os.Setenv("MARKDOWN_CONTENT_DIR", "./test_data")
+	os.Setenv("CONTENT_DIR", "./test_data")
 	os.Setenv("MARKDOWN_CONTENT_FILE", "test.md")
 
 	m := New()
@@ -24,6 +24,6 @@ some content`)
 
 func teardown(t *testing.T) {
 	utils.RemoveTestDir(t, "test_data")
-	os.Unsetenv("MARKDOWN_CONTENT_DIR")
+	os.Unsetenv("CONTENT_DIR")
 	os.Unsetenv("MARKDOWN_CONTENT_FILE")
 }
