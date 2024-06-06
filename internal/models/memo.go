@@ -118,3 +118,11 @@ func (m MemoSort) Less(i, j int) bool {
 
 	return t1.After(t2) // Sort in descending order
 }
+
+type TagSort []Tag
+
+func (t TagSort) Len() int      { return len(t) }
+func (t TagSort) Swap(i, j int) { t[i], t[j] = t[j], t[i] }
+func (t TagSort) Less(i, j int) bool {
+	return t[i].Name < t[j].Name
+}

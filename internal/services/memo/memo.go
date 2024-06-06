@@ -6,14 +6,14 @@ import (
 )
 
 type Servicer interface {
-	Get(limit uint, offset uint) ([]models.Memo, error)
+	Get(offset uint, limit uint) ([]models.Memo, error)
+	GetTags() ([]models.Tag, error)
 	GetSize() int
 }
 
 type service struct {
 	config     *config
-	cache      map[string][]models.Memo
-	size       int
+	cache      map[string]interface{}
 	markdowner markdown.Moduler
 }
 
@@ -22,8 +22,7 @@ var _ Servicer = (*service)(nil)
 func New(mm markdown.Moduler) *service {
 	return &service{
 		config:     parseConfig(),
-		cache:      make(map[string][]models.Memo),
-		size:       0,
+		cache:      make(map[string]interface{}),
 		markdowner: mm,
 	}
 }

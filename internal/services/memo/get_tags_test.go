@@ -1,6 +1,7 @@
 package memo
 
 import (
+	"lazts/internal/models"
 	"lazts/internal/modules/markdown"
 	"lazts/internal/utils"
 	"os"
@@ -9,39 +10,46 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
-func TestGetSize(t *testing.T) {
+func TestGetTags(t *testing.T) {
 	tests := []struct {
 		name           string
 		contentDir     string
-		size           int
+		cached         []models.Tag
 		setup          func(t *testing.T, dir string, mock *markdown.Mock)
 		teardown       func(t *testing.T, dir string)
-		expectedResult int
+		expectedResult []models.Tag
+		expectedError  bool
 	}{
 		{
 			name:       "Successful retrieval",
 			contentDir: "test_content",
-			size:       0,
+			cached:     nil,
 			setup: func(t *testing.T, dir string, mock *markdown.Mock) {
 				os.Setenv("CONTENT_DIR", dir)
 				utils.CreateTestFile(t, dir, "memos/00000000-slug-1/index.md", "some content")
 				utils.CreateTestFile(t, dir, "memos/00000000-slug-2/index.md", "some content")
 				utils.CreateTestFile(t, dir, "memos/00000000-slug-3/index.md", "some content")
 
-				mock.On("ToMetadata", dir+"/memos/00000000-slug-1/index.md").Return(map[string]interface{}{}, nil).Once()
-				mock.On("ToMetadata", dir+"/memos/00000000-slug-2/index.md").Return(map[string]interface{}{}, nil).Once()
-				mock.On("ToMetadata", dir+"/memos/00000000-slug-3/index.md").Return(map[string]interface{}{}, nil).Once()
+				mock.On("ToMetadata", dir+"/memos/00000000-slug-1/index.md").Return(map[string]interface{}{"tags": []string{"A"}}, nil).Once()
+				mock.On("ToMetadata", dir+"/memos/00000000-slug-2/index.md").Return(map[string]interface{}{"tags": []string{"A", "B"}}, nil).Once()
+				mock.On("ToMetadata", dir+"/memos/00000000-slug-3/index.md").Return(map[string]interface{}{"tags": []string{"C", "D"}}, nil).Once()
 			},
 			teardown: func(t *testing.T, dir string) {
 				os.Unsetenv("CONTENT_DIR")
 				utils.RemoveTestDir(t, dir)
 			},
-			expectedResult: 3,
+			expectedResult: []models.Tag{
+				{Name: "A", Link: "/memos/a", Count: 2},
+				{Name: "B", Link: "/memos/b", Count: 1},
+				{Name: "C", Link: "/memos/c", Count: 1},
+				{Name: "D", Link: "/memos/d", Count: 1},
+			},
+			expectedError: false,
 		},
 		{
 			name:       "Error from Get method",
 			contentDir: "test_data",
-			size:       0,
+			cached:     nil,
 			setup: func(t *testing.T, dir string, mock *markdown.Mock) {
 				os.Setenv("CONTENT_DIR", dir)
 			},
@@ -49,12 +57,18 @@ func TestGetSize(t *testing.T) {
 				os.Unsetenv("CONTENT_DIR")
 				utils.RemoveTestDir(t, dir)
 			},
-			expectedResult: 0,
+			expectedResult: nil,
+			expectedError:  true,
 		},
 		{
-			name:       "Return cached size",
+			name:       "Return cached tags",
 			contentDir: "test_data",
-			size:       7,
+			cached: []models.Tag{
+				{Name: "A", Count: 2},
+				{Name: "B", Count: 1},
+				{Name: "C", Count: 1},
+				{Name: "D", Count: 1},
+			},
 			setup: func(t *testing.T, dir string, mock *markdown.Mock) {
 				os.Setenv("CONTENT_DIR", dir)
 			},
@@ -62,7 +76,13 @@ func TestGetSize(t *testing.T) {
 				os.Unsetenv("CONTENT_DIR")
 				utils.RemoveTestDir(t, dir)
 			},
-			expectedResult: 7,
+			expectedResult: []models.Tag{
+				{Name: "A", Count: 2},
+				{Name: "B", Count: 1},
+				{Name: "C", Count: 1},
+				{Name: "D", Count: 1},
+			},
+			expectedError: false,
 		},
 	}
 
@@ -73,10 +93,16 @@ func TestGetSize(t *testing.T) {
 			defer tt.teardown(t, tt.contentDir)
 
 			r := New(markdownMock)
-			r.cache["SIZE"] = tt.size
-			result := r.GetSize()
+			r.cache["TAGS"] = tt.cached
+			result, err := r.GetTags()
 
-			assert.Equal(t, tt.expectedResult, result, "Expected and actual results do not match")
+			if tt.expectedError {
+				assert.Error(t, err, "Expected an error but did not get one")
+			} else {
+				assert.NoError(t, err, "Did not expect an error but got one")
+				assert.ElementsMatch(t, tt.expectedResult, result, "Expected and actual memos do not match")
+			}
+
 			markdownMock.AssertExpectations(t)
 		})
 	}
