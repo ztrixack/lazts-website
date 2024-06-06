@@ -40,9 +40,8 @@ func TestWeb_RenderMarkdown(t *testing.T) {
 			path:    "blog-content",
 			content: "sample",
 			setup: func() {
-				mock.On("ReadFile", "sample", testDir+"/contents/blog/sample/index.md").Return([]byte{}, nil).Once()
-				mock.On("ToHTML", "sample", []byte{}).Return(`<h1>Blog Page 1</h1>`, nil).Once()
-				mock.On("ToMetadata", "sample", []byte{}).Return(map[string]interface{}{}, nil).Once()
+				mock.On("LoadContent", "blog", "sample").Return(`<h1>Blog Page 1</h1>`, nil).Once()
+				mock.On("LoadMetadata", "blog", "sample").Return(map[string]interface{}{}, nil).Once()
 			},
 			want:      `<html><head></head><body><h2>Blog</h2><article><h1>Blog Page 1</h1></article></body></html>`,
 			expectErr: false,
@@ -52,8 +51,7 @@ func TestWeb_RenderMarkdown(t *testing.T) {
 			path:    "blog-content",
 			content: "sample",
 			setup: func() {
-				mock.On("ReadFile", "sample", testDir+"/contents/blog/sample/index.md").Return([]byte{}, nil).Once()
-				mock.On("ToHTML", "sample", []byte{}).Return("", assert.AnError).Once()
+				mock.On("LoadContent", "blog", "sample").Return("", assert.AnError).Once()
 			},
 			expectErr: true,
 		},
@@ -62,9 +60,8 @@ func TestWeb_RenderMarkdown(t *testing.T) {
 			path:    "blog-content",
 			content: "sample",
 			setup: func() {
-				mock.On("ReadFile", "sample", testDir+"/contents/blog/sample/index.md").Return([]byte{}, nil).Once()
-				mock.On("ToHTML", "sample", []byte{}).Return("", nil).Once()
-				mock.On("ToMetadata", "sample", []byte{}).Return(map[string]interface{}{}, nil).Once()
+				mock.On("LoadContent", "blog", "sample").Return("", nil).Once()
+				mock.On("LoadMetadata", "blog", "sample").Return(map[string]interface{}{}, nil).Once()
 			},
 			want:      `<html><head></head><body><h2>Blog</h2><article></article></body></html>`,
 			expectErr: false,
@@ -74,8 +71,7 @@ func TestWeb_RenderMarkdown(t *testing.T) {
 			path:    "blog-content",
 			content: "nonexist",
 			setup: func() {
-				mock.On("ReadFile", "nonexist", testDir+"/contents/blog/nonexist/index.md").Return([]byte{}, nil).Once()
-				mock.On("ToHTML", "nonexist", []byte{}).Return("", assert.AnError).Once()
+				mock.On("LoadContent", "blog", "nonexist").Return("", assert.AnError).Once()
 			},
 			expectErr: true,
 		},

@@ -40,8 +40,7 @@ func TestGet(t *testing.T) {
 				os.Setenv("CONTENT_DIR", dir)
 				utils.CreateTestFile(t, dir, "memos/00000000-slug-1/index.md", "some content")
 
-				mock.On("ReadFile", "00000000-slug-1", dir+"/memos/00000000-slug-1/index.md").Return([]byte{}, nil).Once()
-				mock.On("ToMetadata", "00000000-slug-1", []byte{}).Return(content, nil).Once()
+				mock.On("LoadMetadata", "memos", "00000000-slug-1").Return(content, nil).Once()
 			},
 			teardown: func(t *testing.T, dir string) {
 				os.Unsetenv("CONTENT_DIR")
@@ -94,8 +93,7 @@ func TestGet(t *testing.T) {
 				os.Setenv("CONTENT_DIR", dir)
 				utils.CreateTestFile(t, dir, "memos/00000000-slug-1/index.md", "some content")
 
-				mock.On("ReadFile", "00000000-slug-1", dir+"/memos/00000000-slug-1/index.md").Return([]byte{}, nil).Once()
-				mock.On("ToMetadata", "00000000-slug-1", []byte{}).Return(map[string]interface{}{}, assert.AnError).Once()
+				mock.On("LoadMetadata", "memos", "00000000-slug-1").Return(map[string]interface{}{}, assert.AnError).Once()
 			},
 			teardown: func(t *testing.T, dir string) {
 				os.Unsetenv("CONTENT_DIR")
@@ -115,10 +113,8 @@ func TestGet(t *testing.T) {
 				utils.CreateTestFile(t, dir, "memos/00000000-slug-1/index.md", "some content")
 				utils.CreateTestFile(t, dir, "memos/00000000-slug-2/index.md", "some content")
 
-				mock.On("ReadFile", "00000000-slug-1", dir+"/memos/00000000-slug-1/index.md").Return([]byte{}, nil).Once()
-				mock.On("ToMetadata", "00000000-slug-1", []byte{}).Return(content, nil).Once()
-				mock.On("ReadFile", "00000000-slug-2", dir+"/memos/00000000-slug-2/index.md").Return([]byte{}, nil).Once()
-				mock.On("ToMetadata", "00000000-slug-2", []byte{}).Return(map[string]interface{}{"tag": []string{"tag1"}}, nil).Once()
+				mock.On("LoadMetadata", "memos", "00000000-slug-1").Return(content, nil).Once()
+				mock.On("LoadMetadata", "memos", "00000000-slug-2").Return(map[string]interface{}{"tag": []string{"tag1"}}, nil).Once()
 			},
 			teardown: func(t *testing.T, dir string) {
 				os.Unsetenv("CONTENT_DIR")

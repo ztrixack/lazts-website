@@ -24,8 +24,7 @@ func TestGet(t *testing.T) {
 			setup: func(t *testing.T, dir string, mock *markdown.Mock) {
 				utils.CreateTestFile(t, dir, "vacations/0000-slug/index.md", "some content")
 
-				mock.On("ReadFile", "0000-slug", dir+"/vacations/0000-slug/index.md").Return([]byte{}, nil).Once()
-				mock.On("ToMetadata", "0000-slug", []byte{}).Return(map[string]interface{}{
+				mock.On("LoadMetadata", "vacations", "0000-slug").Return(map[string]interface{}{
 					"title":           "title",
 					"slug":            "0000-slug",
 					"excerpt":         "excerpt",

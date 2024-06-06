@@ -39,13 +39,7 @@ func (s *service) Get(offset uint, limit uint, tag string) ([]models.Memo, error
 			return
 		}
 
-		filedata, err := s.markdowner.ReadFile(dir.Name(), filepath.Join(s.config.ContentDir, "memos", dir.Name(), "index.md"))
-		if err != nil {
-			errChan <- err
-			return
-		}
-
-		metadata, err := s.markdowner.ToMetadata(dir.Name(), filedata)
+		metadata, err := s.markdowner.LoadMetadata("memos", dir.Name())
 		if err != nil {
 			errChan <- err
 			return

@@ -31,14 +31,7 @@ func (m *service) RenderMarkdown(w io.Writer, name string, content string, data 
 		return ErrParseContent
 	}
 
-	filepath := filepath.Join(m.config.Dir, "contents", strings.Split(name, "-")[0], content, "index.md")
-	filedata, err := m.markdown.ReadFile(content, filepath)
-	if err != nil {
-		log.Error().Err(err).Msg("failed to read file")
-		return ErrNotFound
-	}
-
-	htmlContent, err := m.markdown.ToHTML(content, filedata)
+	htmlContent, err := m.markdown.LoadContent(strings.Split(name, "-")[0], content)
 	if err != nil {
 		log.Error().Err(err).Msg("failed to convert markdown to html")
 		return ErrConvertMarkdown
@@ -48,7 +41,7 @@ func (m *service) RenderMarkdown(w io.Writer, name string, content string, data 
 		return ErrParseContent
 	}
 
-	metadata, err := m.markdown.ToMetadata(content, filedata)
+	metadata, err := m.markdown.LoadMetadata(strings.Split(name, "-")[0], content)
 	if err != nil {
 		log.Error().Err(err).Msg("failed to get metadata")
 		return err

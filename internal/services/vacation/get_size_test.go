@@ -28,12 +28,9 @@ func TestGetSize(t *testing.T) {
 				utils.CreateTestFile(t, dir, "vacations/00000000-slug-2/index.md", "some content")
 				utils.CreateTestFile(t, dir, "vacations/00000000-slug-3/index.md", "some content")
 
-				mock.On("ReadFile", "00000000-slug-1", dir+"/vacations/00000000-slug-1/index.md").Return([]byte{}, nil).Once()
-				mock.On("ToMetadata", "00000000-slug-1", []byte{}).Return(map[string]interface{}{}, nil).Once()
-				mock.On("ReadFile", "00000000-slug-2", dir+"/vacations/00000000-slug-2/index.md").Return([]byte{}, nil).Once()
-				mock.On("ToMetadata", "00000000-slug-2", []byte{}).Return(map[string]interface{}{}, nil).Once()
-				mock.On("ReadFile", "00000000-slug-3", dir+"/vacations/00000000-slug-3/index.md").Return([]byte{}, nil).Once()
-				mock.On("ToMetadata", "00000000-slug-3", []byte{}).Return(map[string]interface{}{}, nil).Once()
+				mock.On("LoadMetadata", "vacations", "00000000-slug-1").Return(map[string]interface{}{}, nil).Once()
+				mock.On("LoadMetadata", "vacations", "00000000-slug-2").Return(map[string]interface{}{}, nil).Once()
+				mock.On("LoadMetadata", "vacations", "00000000-slug-3").Return(map[string]interface{}{}, nil).Once()
 			},
 			teardown: func(t *testing.T, dir string) {
 				os.Unsetenv("CONTENT_DIR")

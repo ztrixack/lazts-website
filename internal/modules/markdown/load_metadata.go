@@ -3,6 +3,7 @@ package markdown
 import (
 	"bytes"
 	"lazts/internal/utils"
+	"path/filepath"
 
 	"github.com/rs/zerolog/log"
 	"github.com/yuin/goldmark"
@@ -10,10 +11,16 @@ import (
 	"github.com/yuin/goldmark/parser"
 )
 
-func (m *module) ToMetadata(name string, data []byte) (map[string]interface{}, error) {
-	KEY := "METADATA-" + name
-	if data, ok := m.cache[KEY].(map[string]interface{}); data != nil && ok {
-		return data, nil
+func (m *module) LoadMetadata(domain string, slug string) (map[string]interface{}, error) {
+	KEY := m.genKey("METADATA", domain, slug)
+	if content, found := m.cache.Get(KEY); found {
+		return content.(map[string]interface{}), nil
+	}
+
+	filepath := filepath.Join(m.config.ContentDir, domain, slug, m.config.ContentFile)
+	data, err := m.readFile(filepath)
+	if err != nil {
+		return nil, err
 	}
 
 	context := parser.NewContext()
@@ -30,7 +37,6 @@ func (m *module) ToMetadata(name string, data []byte) (map[string]interface{}, e
 	} else {
 		log.Debug().Interface("metadata", metadata).Msg("no metadata")
 	}
-
-	m.cache[KEY] = metadata
+	m.cache.Set(KEY, metadata)
 	return metadata, nil
 }

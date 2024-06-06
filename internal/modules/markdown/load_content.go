@@ -2,6 +2,7 @@ package markdown
 
 import (
 	"bytes"
+	"path/filepath"
 	"strings"
 
 	katex "github.com/FurqanSoftware/goldmark-katex"
@@ -20,10 +21,16 @@ import (
 	"go.abhg.dev/goldmark/toc"
 )
 
-func (m *module) ToHTML(name string, data []byte) (string, error) {
-	KEY := "HTML-" + name
-	if data, ok := m.cache[KEY].(string); data != "" && ok {
-		return data, nil
+func (m *module) LoadContent(domain string, slug string) (string, error) {
+	KEY := m.genKey("HTML", domain, slug)
+	if content, found := m.cache.Get(KEY); found {
+		return content.(string), nil
+	}
+
+	filepath := filepath.Join(m.config.ContentDir, domain, slug, m.config.ContentFile)
+	data, err := m.readFile(filepath)
+	if err != nil {
+		return "", err
 	}
 
 	context := parser.NewContext()
@@ -54,7 +61,7 @@ func (m *module) ToHTML(name string, data []byte) (string, error) {
 		return "", err
 	}
 	result := strings.TrimSpace(buf.String())
-	m.cache[KEY] = result
+	m.cache.Set(KEY, result)
 
 	return result, nil
 }
