@@ -14,7 +14,7 @@ func (s *service) GetTags() ([]models.Tag, error) {
 		return cache, nil
 	}
 
-	memos, err := s.Get(0, math.MaxInt)
+	memos, err := s.Get(0, math.MaxInt, "")
 	if err != nil {
 		return nil, err
 	}

@@ -29,6 +29,7 @@ func TestGet(t *testing.T) {
 		teardown      func(t *testing.T, dir string)
 		offset        uint
 		limit         uint
+		tag           string
 		expectedMemos []models.Memo
 		expectedError bool
 	}{
@@ -47,6 +48,7 @@ func TestGet(t *testing.T) {
 			},
 			offset: 0,
 			limit:  10,
+			tag:    "",
 			expectedMemos: []models.Memo{
 				{
 					Title:         "title",
@@ -80,6 +82,7 @@ func TestGet(t *testing.T) {
 			},
 			offset:        0,
 			limit:         10,
+			tag:           "",
 			expectedMemos: nil,
 			expectedError: true,
 		},
@@ -98,8 +101,48 @@ func TestGet(t *testing.T) {
 			},
 			offset:        0,
 			limit:         1,
+			tag:           "",
 			expectedMemos: nil,
 			expectedError: true,
+		},
+		{
+			name:       "Successful retrieval with offset, limit and tag",
+			contentDir: "test_content",
+			setup: func(t *testing.T, dir string, mock *markdown.Mock) {
+				os.Setenv("CONTENT_DIR", dir)
+				utils.CreateTestFile(t, dir, "memos/00000000-slug-1/index.md", "some content")
+				utils.CreateTestFile(t, dir, "memos/00000000-slug-2/index.md", "some content")
+
+				mock.On("ToMetadata", dir+"/memos/00000000-slug-1/index.md").Return(content, nil).Once()
+				mock.On("ToMetadata", dir+"/memos/00000000-slug-2/index.md").Return(map[string]interface{}{"tag": []string{"tag1"}}, nil).Once()
+			},
+			teardown: func(t *testing.T, dir string) {
+				os.Unsetenv("CONTENT_DIR")
+				utils.RemoveTestDir(t, dir)
+			},
+			offset: 0,
+			limit:  10,
+			tag:    "tag2",
+			expectedMemos: []models.Memo{
+				{
+					Title:         "title",
+					Excerpt:       "excerpt",
+					FeaturedImage: "/static/contents/memos/00000000-slug-1/image.png",
+					Link:          "/memos/tag1/00000000-slug-1",
+					Tags: []models.Tag{
+						{Name: "tag1", Link: "/memos/tag1", Count: 1},
+						{Name: "tag2", Link: "/memos/tag2", Count: 1},
+					},
+					DateTimeISO:        "2017-01-01T00:00:00Z",
+					DateTimeReadable:   "01 มกราคม 2017",
+					LastUpdatedISO:     "2024-05-23T00:00:00Z",
+					LastUpdateReadable: "23 พฤษภาคม 2024",
+					DayMonth:           "01 Jan",
+					Year:               "2017",
+					ReadTime:           0,
+				},
+			},
+			expectedError: false,
 		},
 	}
 
@@ -110,7 +153,7 @@ func TestGet(t *testing.T) {
 			defer tt.teardown(t, tt.contentDir)
 
 			s := New(markdownMock)
-			memos, err := s.Get(tt.offset, tt.limit)
+			memos, err := s.Get(tt.offset, tt.limit, tt.tag)
 
 			if tt.expectedError {
 				assert.Error(t, err, "Expected an error but did not get one")

@@ -6,7 +6,7 @@ import (
 )
 
 type Servicer interface {
-	Get(offset uint, limit uint) ([]models.Memo, error)
+	Get(offset uint, limit uint, tag string) ([]models.Memo, error)
 	GetTags() ([]models.Tag, error)
 	GetSize() int
 }

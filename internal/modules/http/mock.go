@@ -27,6 +27,10 @@ func (m *Mock) Get(path string, handler http.HandlerFunc) {
 	m.Called(path, handler)
 }
 
+func (m *Mock) StaticFileServer(prefix string, handler http.HandlerFunc) {
+	m.Called(prefix, handler)
+}
+
 func (m *Mock) Use(middlewares ...func(http.Handler) http.Handler) {
 	m.Called(middlewares)
 }

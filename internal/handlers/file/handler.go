@@ -1,25 +1,35 @@
 package file
 
 import (
+	"lazts/internal/models/types"
 	"lazts/internal/modules/http"
 	"lazts/internal/services/watermark"
+
+	"github.com/tdewolff/minify/v2"
+	"github.com/tdewolff/minify/v2/css"
+	"github.com/tdewolff/minify/v2/js"
 )
 
 type handler struct {
-	ws watermark.Servicer
+	minifier   *minify.M
+	watermaker watermark.Servicer
 }
 
 func New(m http.Moduler, ws watermark.Servicer) {
-	h := &handler{ws}
+	mn := minify.New()
+	mn.AddFunc(types.CSS, css.Minify)
+	mn.AddFunc(types.JavaScript, js.Minify)
+
+	h := &handler{mn, ws}
 	h.setRouter(m)
 }
 
 func (h *handler) setRouter(m http.Moduler) {
-	m.Get("/static/icons/", h.Icons)
-	m.Get("/static/images/", h.Images)
-	m.Get("/static/contents/", h.ImageContents)
-	m.Get("/static/js/", h.Javascript)
-	m.Get("/static/css/", h.CSS)
-	m.Get("/manifest.json", h.StaticFile)
-	m.Get("/service-worker.js", h.StaticFile)
+	m.StaticFileServer("/static/icons/", h.IconFile("./web/static/icons"))
+	m.StaticFileServer("/static/css/", h.StaticFile("./web/static/css"))
+	m.StaticFileServer("/static/js/", h.StaticFile("./web/static/js"))
+	m.StaticFileServer("/static/images/", h.StaticFile("./static/images"))
+	m.StaticFileServer("/static/contents/", h.StaticFile("./contents"))
+	m.Get("/manifest.json", h.StaticFile("./web/static/root"))
+	m.Get("/service-worker.js", h.StaticFile("./webstatic/root"))
 }

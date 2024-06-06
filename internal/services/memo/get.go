@@ -7,11 +7,14 @@ import (
 	"os"
 	"path/filepath"
 	"sort"
+	"strings"
 	"sync"
+
+	"github.com/rs/zerolog/log"
 )
 
-func (s *service) Get(offset uint, limit uint) ([]models.Memo, error) {
-	KEY := fmt.Sprintf("DATA-%d-%d", offset, limit)
+func (s *service) Get(offset uint, limit uint, tag string) ([]models.Memo, error) {
+	KEY := fmt.Sprintf("DATA-%d-%d-%s", offset, limit, tag)
 	if s.cache[KEY] != nil {
 		return s.cache[KEY].([]models.Memo), nil
 	}
@@ -29,25 +32,12 @@ func (s *service) Get(offset uint, limit uint) ([]models.Memo, error) {
 		errChan = make(chan error, 1)
 	)
 
-	processDir := func(dir os.DirEntry) {
+	processDir := func(dir os.DirEntry, tag string) {
 		defer wg.Done()
 
 		if !dir.IsDir() {
 			return
 		}
-
-		mu.Lock()
-		if count < offset {
-			count++
-			mu.Unlock()
-			return
-		}
-		if count >= offset+limit {
-			mu.Unlock()
-			return
-		}
-		count++
-		mu.Unlock()
 
 		metadata, err := s.markdowner.ToMetadata(filepath.Join(s.config.ContentDir, "memos", dir.Name(), "index.md"))
 		if err != nil {
@@ -62,8 +52,21 @@ func (s *service) Get(offset uint, limit uint) ([]models.Memo, error) {
 		}
 
 		mu.Lock()
+		defer mu.Unlock()
+		if count < offset {
+			count++
+			return
+		}
+		if count >= offset+limit {
+			return
+		}
+		if tag != "" && notContains(metamemo.Tags, tag) {
+			log.Debug().Str("dir", dir.Name()).Str("tag", tag).Msg("Skipping memo due to tag mismatch")
+			return
+		}
+
+		count++
 		memos = append(memos, metamemo.ToMemo())
-		mu.Unlock()
 	}
 
 	for _, dir := range dirs {
@@ -71,7 +74,7 @@ func (s *service) Get(offset uint, limit uint) ([]models.Memo, error) {
 			break
 		}
 		wg.Add(1)
-		go processDir(dir)
+		go processDir(dir, tag)
 	}
 
 	go func() {
@@ -85,6 +88,17 @@ func (s *service) Get(offset uint, limit uint) ([]models.Memo, error) {
 
 	sort.Sort(models.MemoSort(memos))
 
+	log.Debug().Int("count", len(memos)).Uint("offset", offset).Uint("limit", limit).Str("tag", tag).Msg("Get memos")
+
 	s.cache[KEY] = memos
 	return memos, nil
+}
+
+func notContains(tags []string, tag string) bool {
+	for _, t := range tags {
+		if strings.EqualFold(t, tag) {
+			return false
+		}
+	}
+	return true
 }

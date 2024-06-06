@@ -1,8 +1,13 @@
 package file
 
-import "net/http"
+import (
+	"net/http"
+	"path/filepath"
+)
 
-func (h *handler) Icons(w http.ResponseWriter, r *http.Request) {
-	fs := http.FileServer(http.Dir("web/static/icons"))
-	http.StripPrefix("/static/icons", fs).ServeHTTP(w, r)
+func (h *handler) IconFile(prefix string) http.HandlerFunc {
+	return func(w http.ResponseWriter, r *http.Request) {
+		filePath := filepath.Join(prefix, r.URL.Path)
+		http.ServeFile(w, r, filePath)
+	}
 }

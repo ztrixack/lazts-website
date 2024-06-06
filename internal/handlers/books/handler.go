@@ -1,18 +1,26 @@
 package books
 
 import (
+	"lazts/internal/models/types"
 	"lazts/internal/modules/http"
 	"lazts/internal/services/book"
 	"lazts/internal/services/web"
+
+	"github.com/tdewolff/minify/v2"
+	"github.com/tdewolff/minify/v2/html"
 )
 
 type handler struct {
-	webber web.Servicer
-	book   book.Servicer
+	minifier *minify.M
+	webber   web.Servicer
+	booker   book.Servicer
 }
 
 func New(m http.Moduler, w web.Servicer, b book.Servicer) {
-	h := &handler{w, b}
+	mn := minify.New()
+	mn.AddFunc(types.HTML, html.Minify)
+
+	h := &handler{mn, w, b}
 	h.setRouter(m)
 }
 

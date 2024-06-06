@@ -6,10 +6,12 @@ import (
 	"net/http"
 	"strconv"
 
+	"github.com/gorilla/mux"
 	"github.com/rs/zerolog/log"
 )
 
-func (h *handler) Memos(w http.ResponseWriter, r *http.Request) {
+func (h *handler) MemosGroups(w http.ResponseWriter, r *http.Request) {
+	params := mux.Vars(r)
 	data := make(map[string]interface{})
 	data["Menu"] = DEFAULT_MENU
 
@@ -20,22 +22,22 @@ func (h *handler) Memos(w http.ResponseWriter, r *http.Request) {
 		offset = uint(page) * limit
 	}
 
+	if params["group"] == "" {
+		log.Error().Msg("Group is required")
+		http.Error(w, "Group is required", http.StatusBadRequest)
+		return
+	}
+
 	var err error
-	data["Memos"], err = h.memoizer.Get(offset, limit, "")
+	data["Memos"], err = h.memoizer.Get(offset, limit, params["group"])
 	if err != nil {
 		log.Error().Err(err).Msg("Failed to get memos")
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
-	data["Groups"], err = h.memoizer.GetTags()
-	if err != nil {
-		log.Error().Err(err).Msg("Failed to get tags")
-		http.Error(w, err.Error(), http.StatusInternalServerError)
-		return
-	}
 
 	var buf bytes.Buffer
-	if err := h.webber.RenderPage(&buf, "memos", data); err != nil {
+	if err := h.webber.RenderPage(&buf, "memos-groups", data); err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}

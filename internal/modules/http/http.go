@@ -4,36 +4,41 @@ import (
 	"context"
 	"fmt"
 	"net/http"
-	"strings"
+	"time"
 
-	"github.com/rs/zerolog/log"
+	"github.com/gorilla/mux"
 )
 
 type Moduler interface {
 	Serve() error
-	Shutdown(c context.Context) error
+	Shutdown(ctx context.Context) error
 	Get(path string, handler http.HandlerFunc)
+	StaticFileServer(prefix string, handler http.HandlerFunc)
 	Use(middlewares ...func(http.Handler) http.Handler)
 }
 
 type module struct {
 	Address     string
 	config      *config
-	mux         *http.ServeMux
+	router      *mux.Router
 	server      *http.Server
 	middlewares []func(http.Handler) http.Handler
 }
 
 func New() *module {
 	c := parseConfig()
-	m := http.NewServeMux()
+	r := mux.NewRouter()
 	addr := fmt.Sprintf("%s:%s", c.Host, c.Port)
+
 	return &module{
 		config: c,
-		mux:    m,
+		router: r,
 		server: &http.Server{
-			Addr:    addr,
-			Handler: m,
+			Addr:         addr,
+			Handler:      r,
+			ReadTimeout:  15 * time.Second,
+			WriteTimeout: 15 * time.Second,
+			IdleTimeout:  60 * time.Second,
 		},
 		Address: addr,
 	}
@@ -43,32 +48,26 @@ func (m *module) Serve() error {
 	return m.server.ListenAndServe()
 }
 
-func (m *module) Shutdown(c context.Context) error {
-	return m.server.Shutdown(c)
+func (m *module) Shutdown(ctx context.Context) error {
+	return m.server.Shutdown(ctx)
 }
 
 func (m *module) Get(path string, handler http.HandlerFunc) {
-	m.mux.HandleFunc(path, func(w http.ResponseWriter, r *http.Request) {
-		if r.Method != http.MethodGet {
-			w.WriteHeader(http.StatusMethodNotAllowed)
-			return
-		}
+	chain := m.applyMiddlewares(handler).(http.HandlerFunc)
+	m.router.HandleFunc(path, chain).Methods(http.MethodGet)
+}
 
-		if !strings.HasPrefix(r.URL.Path, "/static") && r.URL.Path != path {
-			log.Debug().Str("url", r.URL.Path).Str("path", path).Msg("invalid path")
-			w.WriteHeader(http.StatusNotFound)
-			return
-		}
-
-		var current http.Handler = handler
-		for _, middleware := range m.middlewares {
-			current = middleware(current)
-		}
-
-		current.ServeHTTP(w, r)
-	})
+func (m *module) StaticFileServer(prefix string, handler http.HandlerFunc) {
+	m.router.PathPrefix(prefix).Handler(http.StripPrefix(prefix, handler))
 }
 
 func (m *module) Use(middlewares ...func(http.Handler) http.Handler) {
 	m.middlewares = append(m.middlewares, middlewares...)
+}
+
+func (m *module) applyMiddlewares(handler http.Handler) http.Handler {
+	for _, middleware := range m.middlewares {
+		handler = middleware(handler)
+	}
+	return handler
 }

@@ -27,7 +27,8 @@ require (
 	github.com/mailru/easyjson v0.7.7 // indirect
 	github.com/pmezard/go-difflib v1.0.0 // indirect
 	github.com/stretchr/objx v0.5.2 // indirect
-	golang.org/x/image v0.0.0-20211028202545-6944b10bf410 // indirect
+	github.com/tdewolff/parse/v2 v2.7.14 // indirect
+	golang.org/x/image v0.17.0 // indirect
 	gopkg.in/yaml.v2 v2.3.0 // indirect
 	gopkg.in/yaml.v3 v3.0.1 // indirect
 )
@@ -37,9 +38,11 @@ require (
 	github.com/alecthomas/chroma/v2 v2.14.0
 	github.com/chai2010/webp v1.1.1
 	github.com/disintegration/imaging v1.6.2
+	github.com/gorilla/mux v1.8.1
 	github.com/mangoumbrella/goldmark-figure v1.0.0
 	github.com/mattn/go-colorable v0.1.13 // indirect
 	github.com/mattn/go-isatty v0.0.19 // indirect
 	github.com/stretchr/testify v1.9.0
+	github.com/tdewolff/minify/v2 v2.20.32
 	golang.org/x/sys v0.16.0 // indirect
 )
