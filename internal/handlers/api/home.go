@@ -6,7 +6,7 @@ import (
 	"lazts/internal/utils"
 	"net/http"
 
-	"github.com/rs/zerolog/log"
+	"lazts/internal/modules/log"
 )
 
 func (h *handler) Home(w http.ResponseWriter, r *http.Request) {
@@ -19,35 +19,35 @@ func (h *handler) Home(w http.ResponseWriter, r *http.Request) {
 	var err error
 	data["BookStats"], err = h.booker.GetStats()
 	if err != nil {
-		log.Error().Err(err).Msg("failed to get book stats")
+		log.Err(err).E("failed to get book stats")
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
 
 	data["BookShelf"], err = h.booker.GetShelf(2, 3, 4)
 	if err != nil {
-		log.Error().Err(err).Msg("failed to get random 2 books")
+		log.Err(err).E("failed to get random 2 books")
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
 
 	data["Vacations"], err = h.vacationer.Get("japan")
 	if err != nil {
-		log.Error().Err(err).Msg("failed to get vacations")
+		log.Err(err).E("failed to get vacations")
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
 
 	data["Memos"], err = h.memoizer.Get(0, 10, "")
 	if err != nil {
-		log.Error().Err(err).Msg("failed to get memos")
+		log.Err(err).E("failed to get memos")
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
 
 	var buf bytes.Buffer
 	if err := h.webber.RenderPage(w, "home", data); err != nil {
-		log.Error().Err(err).Msg("failed to render page")
+		log.Err(err).E("failed to render page")
 	}
 
 	minifiedHTML, err := h.minifier.Bytes(types.HTML, buf.Bytes())

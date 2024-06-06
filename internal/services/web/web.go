@@ -8,7 +8,7 @@ import (
 	"text/template"
 	"time"
 
-	"github.com/rs/zerolog/log"
+	"lazts/internal/modules/log"
 )
 
 type Servicer interface {
@@ -35,15 +35,15 @@ func parseTemplates(path string) *template.Template {
 	tmpl := template.New("")
 
 	if _, err := utils.ParseAnyTemplates(tmpl, filepath.Join(path, "templates", "layouts/*.html")); err != nil {
-		log.Fatal().Err(err).Msg("failed to parse layouts")
+		log.Err(err).C("failed to parse layouts")
 	}
 
 	if _, err := utils.ParseAnyTemplates(tmpl, filepath.Join(path, "templates", "partials/*.html")); err != nil {
-		log.Fatal().Err(err).Msg("failed to parse partials")
+		log.Err(err).C("failed to parse partials")
 	}
 
 	if _, err := utils.ParseAnyTemplates(tmpl, filepath.Join(path, "templates", "sections/**/*.html")); err != nil {
-		log.Fatal().Err(err).Msg("failed to parse sections")
+		log.Err(err).C("failed to parse sections")
 	}
 
 	return tmpl

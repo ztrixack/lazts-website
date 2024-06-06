@@ -7,7 +7,7 @@ import (
 	"strings"
 	"time"
 
-	"github.com/rs/zerolog/log"
+	"lazts/internal/modules/log"
 )
 
 type MemoMetadata struct {
@@ -111,7 +111,7 @@ func (m MemoSort) Less(i, j int) bool {
 	t1, err1 := time.Parse(time.RFC3339, m[i].DateTimeISO)
 	t2, err2 := time.Parse(time.RFC3339, m[j].DateTimeISO)
 	if err1 != nil || err2 != nil {
-		log.Error().Err(err1).Err(err2).Msg("Error parsing date")
+		log.Err(err1).Err(err2).E("Error parsing date")
 		return false
 	}
 

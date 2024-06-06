@@ -3,13 +3,13 @@ package middlewares
 import (
 	"net/http"
 
-	"github.com/rs/zerolog/log"
+	"lazts/internal/modules/log"
 )
 
 func Logging(next http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		log.Debug().Str("method", r.Method).Str("url", r.URL.Path).Interface("query", r.URL.Query()).Msg("request received")
+		log.Fields("method", r.Method, "url", r.URL.Path, "query", r.URL.Query()).D("request received")
 		next.ServeHTTP(w, r)
-		log.Debug().Str("method", r.Method).Str("url", r.URL.Path).Interface("query", r.URL.Query()).Msg("request success")
+		log.Fields("method", r.Method, "url", r.URL.Path, "query", r.URL.Query()).D("request success")
 	})
 }

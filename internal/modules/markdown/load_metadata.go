@@ -5,7 +5,8 @@ import (
 	"lazts/internal/utils"
 	"path/filepath"
 
-	"github.com/rs/zerolog/log"
+	"lazts/internal/modules/log"
+
 	"github.com/yuin/goldmark"
 	meta "github.com/yuin/goldmark-meta"
 	"github.com/yuin/goldmark/parser"
@@ -35,7 +36,7 @@ func (m *module) LoadMetadata(domain string, slug string) (map[string]interface{
 	if metadata != nil {
 		metadata["read_time"] = utils.CalculateReadTime(data, m.config.WordPerMinute)
 	} else {
-		log.Debug().Interface("metadata", metadata).Msg("no metadata")
+		log.Fields("metadata", metadata).D("no metadata")
 	}
 	m.cache.Set(KEY, metadata)
 	return metadata, nil

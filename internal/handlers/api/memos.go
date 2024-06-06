@@ -6,7 +6,7 @@ import (
 	"net/http"
 	"strconv"
 
-	"github.com/rs/zerolog/log"
+	"lazts/internal/modules/log"
 )
 
 func (h *handler) Memos(w http.ResponseWriter, r *http.Request) {
@@ -23,13 +23,13 @@ func (h *handler) Memos(w http.ResponseWriter, r *http.Request) {
 	var err error
 	data["Memos"], err = h.memoizer.Get(offset, limit, "")
 	if err != nil {
-		log.Error().Err(err).Msg("Failed to get memos")
+		log.Err(err).E("Failed to get memos")
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
 	data["Groups"], err = h.memoizer.GetTags()
 	if err != nil {
-		log.Error().Err(err).Msg("Failed to get tags")
+		log.Err(err).E("Failed to get tags")
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}

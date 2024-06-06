@@ -6,8 +6,9 @@ import (
 	"net/http"
 	"strconv"
 
+	"lazts/internal/modules/log"
+
 	"github.com/gorilla/mux"
-	"github.com/rs/zerolog/log"
 )
 
 func (h *handler) MemosGroups(w http.ResponseWriter, r *http.Request) {
@@ -23,7 +24,7 @@ func (h *handler) MemosGroups(w http.ResponseWriter, r *http.Request) {
 	}
 
 	if params["group"] == "" {
-		log.Error().Msg("Group is required")
+		log.E("Group is required")
 		http.Error(w, "Group is required", http.StatusBadRequest)
 		return
 	}
@@ -31,7 +32,7 @@ func (h *handler) MemosGroups(w http.ResponseWriter, r *http.Request) {
 	var err error
 	data["Memos"], err = h.memoizer.Get(offset, limit, params["group"])
 	if err != nil {
-		log.Error().Err(err).Msg("Failed to get memos")
+		log.Err(err).E("Failed to get memos")
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}

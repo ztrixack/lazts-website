@@ -6,8 +6,9 @@ import (
 	"lazts/internal/models/types"
 	"net/http"
 
+	"lazts/internal/modules/log"
+
 	"github.com/gorilla/mux"
-	"github.com/rs/zerolog/log"
 )
 
 func (h *handler) VacationsContents(w http.ResponseWriter, r *http.Request) {
@@ -16,7 +17,7 @@ func (h *handler) VacationsContents(w http.ResponseWriter, r *http.Request) {
 	data["Menu"] = DEFAULT_MENU
 
 	if params["content"] == "" {
-		log.Error().Msg("Contents is required")
+		log.E("Contents is required")
 		http.Error(w, "Contents is required", http.StatusBadRequest)
 		return
 	}

@@ -9,8 +9,9 @@ import (
 	"path/filepath"
 	"strings"
 
+	"lazts/internal/modules/log"
+
 	"github.com/chai2010/webp"
-	"github.com/rs/zerolog/log"
 )
 
 func (h *handler) StaticFile(prefix string) http.HandlerFunc {
@@ -18,7 +19,7 @@ func (h *handler) StaticFile(prefix string) http.HandlerFunc {
 		filePath := filepath.Join(prefix, r.URL.Path)
 		ext := strings.ToLower(filepath.Ext(filePath))
 
-		log.Debug().Str("filePath", filePath).Str("url", r.URL.Path).Msg("Serving static file")
+		log.Fields("filePath", filePath, "url", r.URL.Path).D("Serving static file")
 
 		switch ext {
 		case ".css":

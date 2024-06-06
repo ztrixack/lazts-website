@@ -10,7 +10,7 @@ import (
 	"strings"
 	"sync"
 
-	"github.com/rs/zerolog/log"
+	"lazts/internal/modules/log"
 )
 
 func (s *service) Get(offset uint, limit uint, tag string) ([]models.Memo, error) {
@@ -61,7 +61,7 @@ func (s *service) Get(offset uint, limit uint, tag string) ([]models.Memo, error
 			return
 		}
 		if tag != "" && notContains(metamemo.Tags, tag) {
-			log.Debug().Str("dir", dir.Name()).Str("tag", tag).Msg("Skipping memo due to tag mismatch")
+			log.Fields("dir", dir.Name(), "tag", tag).D("Skipping memo due to tag mismatch")
 			return
 		}
 
