@@ -21,6 +21,6 @@ func (s *service) GetCatalogs() ([]models.Option, error) {
 	}
 
 	catalogs = catalogs.Sort()
-	s.cache.Set(KEY, catalogs)
+	s.cache.Set(KEY, catalogs.Get())
 	return catalogs, nil
 }

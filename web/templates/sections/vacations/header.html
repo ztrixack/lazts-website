@@ -4,10 +4,8 @@
     <ol class="list-reset flex">
       {{range .Breadcrumbs}}
       <li>
-        <a
-          href="{{.Link}}"
-          class="font-light text-slate-800 transition duration-150 ease-in-out hover:text-orange-300 focus:text-orange-300 active:text-orange-300 motion-reduce:transition-none dark:text-slate-200"
-        >
+        <a href="{{.Link}}"
+          class="font-light text-slate-800 transition duration-150 ease-in-out hover:text-orange-300 focus:text-orange-300 active:text-orange-300 motion-reduce:transition-none dark:text-slate-200">
           {{.Name}}
         </a>
       </li>
@@ -20,10 +18,9 @@
   </div>
 
   <div class="flex flex-col space-y-4 border-b py-4">
-    <h1 class="mb-2 mt-4 text-4xl font-light tracking-wider text-slate-900 dark:text-slate-100">{{.Title}}</h1>
+    <h1 class="mb-2 mt-4 text-4xl font-medium tracking-wider text-orange-600 dark:text-orange-400">{{.Title}}</h1>
     <div
-      class="flex items-baseline md:space-x-4 max-md:space-y-2 font-light tracking-wide text-slate-600 dark:text-slate-400 max-md:flex-col"
-    >
+      class="flex items-baseline md:space-x-4 max-md:space-y-2 font-light tracking-wide text-slate-600 dark:text-slate-400 max-md:flex-col">
       <span class="pr-4 md:border-r">
         📅 Published
         <time class="text-slate-800 dark:text-slate-200" datetime="{{.PublishedISO}}">{{.Published}}</time>
