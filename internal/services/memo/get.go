@@ -45,14 +45,22 @@ func (s *service) Get(offset uint, limit uint, tag string) ([]models.Memo, error
 			return
 		}
 
-		var metamemo models.MemoMetadata
-		if err := utils.ToStruct(metadata, &metamemo); err != nil {
+		var memo models.MemoMetadata
+		if err := utils.ToStruct(metadata, &memo); err != nil {
 			errChan <- err
 			return
 		}
 
 		mu.Lock()
 		defer mu.Unlock()
+		if tag != "" && notContains(memo.Tags, tag) {
+			log.Fields("dir", dir.Name(), "tag", tag).D("Skipping memo due to tag mismatch")
+			return
+		}
+		if !memo.Published {
+			return
+		}
+
 		if count < offset {
 			count++
 			return
@@ -60,13 +68,9 @@ func (s *service) Get(offset uint, limit uint, tag string) ([]models.Memo, error
 		if count >= offset+limit {
 			return
 		}
-		if tag != "" && notContains(metamemo.Tags, tag) {
-			log.Fields("dir", dir.Name(), "tag", tag).D("Skipping memo due to tag mismatch")
-			return
-		}
 
 		count++
-		memos = append(memos, metamemo.ToMemo())
+		memos = append(memos, memo.ToMemo())
 	}
 
 	for _, dir := range dirs {

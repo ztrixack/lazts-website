@@ -33,10 +33,10 @@ func TestGetTags(t *testing.T) {
 				utils.CreateTestFile(t, CONTENT_DIR, "memos/slug-3/index.md", "")
 				utils.CreateTestFile(t, CONTENT_DIR, "memos/slug-4/index.md", "")
 
-				mock.On("LoadMetadata", "memos", "slug-1").Return(map[string]interface{}{"tags": []string{"A"}}, nil).Once()
-				mock.On("LoadMetadata", "memos", "slug-2").Return(map[string]interface{}{"tags": []string{"A", "B"}}, nil).Once()
-				mock.On("LoadMetadata", "memos", "slug-3").Return(map[string]interface{}{"tags": []string{"A", "C"}}, nil).Once()
-				mock.On("LoadMetadata", "memos", "slug-4").Return(map[string]interface{}{"tags": []string{"A", "C", "D"}}, nil).Once()
+				mock.On("LoadMetadata", "memos", "slug-1").Return(map[string]interface{}{"published": true, "tags": []string{"A"}}, nil).Once()
+				mock.On("LoadMetadata", "memos", "slug-2").Return(map[string]interface{}{"published": true, "tags": []string{"A", "B"}}, nil).Once()
+				mock.On("LoadMetadata", "memos", "slug-3").Return(map[string]interface{}{"published": true, "tags": []string{"A", "C"}}, nil).Once()
+				mock.On("LoadMetadata", "memos", "slug-4").Return(map[string]interface{}{"published": true, "tags": []string{"A", "C", "D"}}, nil).Once()
 			},
 		},
 		{

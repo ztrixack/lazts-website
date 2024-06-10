@@ -1,6 +1,6 @@
 ---
-title: บันทึกการเรียน nRF Connect SDK Fundamentals Course
-slug: 20210612-nrf-connect-sdk-fundamental-introduction
+title: nRF Connect SDK Fundamental; Introduction
+slug: 20220702-nrf-connect-sdk-fundamental-introduction
 excerpt: บันทึกการเรียนรู้หลักสูตร nRF Connect SDK Fundamentals  ที่ทาง Nordic Official สอนการพัฒนา Firmware โดยใช้ nRF Connect SDK และ Zephyr RTOS เพื่อที่จะได้เข้าใจโครงสร้างของ SDK และ RTOS และนำใช้งานกับอุปกรณ์ของ Nordic Semiconductor ได้
 featured_image: nrf52840-0001.png
 published_at: 2021-06-12

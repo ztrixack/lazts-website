@@ -24,9 +24,9 @@ func TestGetSize(t *testing.T) {
 				utils.CreateTestFile(t, CONTENT_DIR, "memos/slug-2/index.md", "")
 				utils.CreateTestFile(t, CONTENT_DIR, "memos/slug-3/index.md", "")
 
-				mock.On("LoadMetadata", "memos", "slug-1").Return(map[string]interface{}{}, nil).Once()
-				mock.On("LoadMetadata", "memos", "slug-2").Return(map[string]interface{}{}, nil).Once()
-				mock.On("LoadMetadata", "memos", "slug-3").Return(map[string]interface{}{}, nil).Once()
+				mock.On("LoadMetadata", "memos", "slug-1").Return(map[string]interface{}{"published": true}, nil).Once()
+				mock.On("LoadMetadata", "memos", "slug-2").Return(map[string]interface{}{"published": true}, nil).Once()
+				mock.On("LoadMetadata", "memos", "slug-3").Return(map[string]interface{}{"published": true}, nil).Once()
 			},
 		},
 		{

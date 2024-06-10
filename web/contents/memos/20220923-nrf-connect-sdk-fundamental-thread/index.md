@@ -1,9 +1,9 @@
 ---
-title:
-slug: 20210915-nrf-connect-sdk-fundamental-printing-and-logging
+title: nRF Connect SDK Fundamental; Thread
+slug: 20220923-nrf-connect-sdk-fundamental-thread
 excerpt:
 featured_image:
-published_at: 2021-09-15
+published_at: 2022-09-23
 last_updated_at: 2024-05-20
 published: false
 tags:
@@ -11,9 +11,9 @@ tags:
   - nRF52840
 ---
 
-## Lesson 5 – Serial communication (UART)
+## Lesson 7 – Printing messages to console and logging
 
-## Lesson 6 – Serial communication (SPI)
+## Lesson 8 – Thread synhronzation
 
 ## Reference
 [Nordic SDK documents](https://docs.nordicsemi.com/bundle/ncs-latest/page/nrf/index.html)
