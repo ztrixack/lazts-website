@@ -466,7 +466,8 @@ app/
 |-- CMakeLists.txt
 |-- Kconfig
 |-- prj.conf
-|-- <board_name>.overlay
+|-- boards/
+    |-- <board_name>.overlay
 |-- src/
     |-- main.c
 ```

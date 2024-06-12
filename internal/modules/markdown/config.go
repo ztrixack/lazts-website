@@ -6,7 +6,7 @@ import (
 
 const (
 	DEFAULT_THEME           = "dracula"
-	DEFAULT_WORD_PER_MINUTE = 250
+	DEFAULT_WORD_PER_MINUTE = 180
 	DEFAULT_CONTENT_DIR     = "./web/contents"
 	DEFAULT_CONTENT_FILE    = "index.md"
 )

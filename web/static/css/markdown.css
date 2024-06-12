@@ -10,17 +10,32 @@
 
 #table-of-contents {
   border-width: 1px;
-  border-color: black;
-  border-bottom: 0px;
-  margin-bottom: 0px;
+  border-color: rgb(51 65 85);
+  border-radius: 1rem;
   padding: 1rem;
-  color: black;
+  color: rgb(51 65 85);
   font-size: medium;
+  cursor: pointer;
+}
+
+#table-of-contents:hover {
+  background-color: rgba(203, 213, 225, 0.5);
 }
 
 .dark #table-of-contents {
-  border-color: white;
-  color: white;
+  border-color: rgb(203 213 225);
+  color: rgb(203 213 225);
+}
+
+.dark #table-of-contents:hover {
+  background-color: rgba(51, 65, 85, 0.5);
+}
+
+#table-of-contents.expanded {
+  border-bottom: 0px;
+  border-bottom-left-radius: 0;
+  border-bottom-right-radius: 0;
+  margin-bottom: 0;
 }
 
 #table-of-contents::before {
@@ -31,24 +46,36 @@
 }
 
 #toc-list {
-  margin-bottom: 4rem;
+  margin-bottom: 2rem;
   padding: 1rem;
   padding-top: 0;
+  padding-bottom: 0;
+  overflow: hidden;
+  max-height: 0;
+  transition: max-height 1s cubic-bezier(0, 1, 0, 1);
+}
+
+#toc-list.expanded {
+  max-height: 1024px;
+  transition: max-height 1s ease-in-out;
   border-width: 1px;
-  border-color: black;
-  border-top: 0px;
+  border-color: rgb(51 65 85);
+  border-bottom-left-radius: 1rem;
+  border-bottom-right-radius: 1rem;
+  border-top: 0;
+  padding-bottom: 1rem;
 }
 
 .dark #toc-list {
-  border-color: white;
+  border-color: rgb(203 213 225);
 }
 
 #toc-list a {
   text-decoration-line: none;
   font-weight: 300;
-  color: black;
+  color: rgb(51 65 85);
 }
 
 .dark #toc-list a {
-  color: white;
+  color: rgb(203 213 225);
 }
