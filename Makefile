@@ -47,8 +47,6 @@ dev-docker:
 	docker compose -f docker-compose.dev.yaml up --build --force-recreate --abort-on-container-exit && \
 	docker compose -f docker-compose.dev.yaml rm -s -f -v
 
-
-
 run:
 	@echo "Running the server..."
 	go run ./cmd/app/main.go

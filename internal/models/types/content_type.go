@@ -7,4 +7,5 @@ const (
 	JPEG       = "image/jpeg"
 	PNG        = "image/png"
 	WebP       = "image/webp"
+	SVG        = "image/svg+xml"
 )

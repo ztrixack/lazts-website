@@ -26,6 +26,7 @@ func New(m http.Moduler, ws watermark.Servicer) {
 
 func (h *handler) setRouter(m http.Moduler) {
 	m.StaticFileServer("/static/icons/", h.IconFile("./web/static/icons"))
+	m.StaticFileServer("/static/svg/", h.StaticFile("./web/static/svg"))
 	m.StaticFileServer("/static/css/", h.StaticFile("./web/static/css"))
 	m.StaticFileServer("/static/js/", h.StaticFile("./web/static/js"))
 	m.StaticFileServer("/static/images/", h.StaticFile("./static/images"))

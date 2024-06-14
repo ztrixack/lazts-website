@@ -6,6 +6,11 @@ module.exports = {
   content: ["./templates/**/*.html", "./static/js/**/*.js"],
   theme: {
     extend: {
+      aspectRatio: {
+        '4/3': '4 / 3',
+        '3/4': '3 / 4',
+        '9/16': '9 / 16',
+      },
       animation: {
         blackhole: 'blackhole 9s linear infinite',
       },

@@ -26,6 +26,8 @@ func (h *handler) StaticFile(prefix string) http.HandlerFunc {
 			h.minifyAndServeFile(w, filePath, types.CSS)
 		case ".js":
 			h.minifyAndServeFile(w, filePath, types.JavaScript)
+		case ".svg":
+			h.serveSVG(w, filePath)
 		case ".jpeg", ".jpg":
 			h.serveJPEG(w, filePath)
 		case ".png":
@@ -92,4 +94,15 @@ func (h *handler) serveWebP(w http.ResponseWriter, filePath string) {
 	if err := webp.Encode(w, img, nil); err != nil {
 		http.Error(w, "Failed to encode image", http.StatusInternalServerError)
 	}
+}
+
+func (h *handler) serveSVG(w http.ResponseWriter, filePath string) {
+	fileContent, err := os.ReadFile(filePath)
+	if err != nil {
+		http.Error(w, "Failed to read file", http.StatusInternalServerError)
+		return
+	}
+
+	w.Header().Set("Content-Type", types.SVG)
+	w.Write(fileContent)
 }

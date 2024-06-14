@@ -12,8 +12,8 @@
 	"requirePragma": false,
 	"insertPragma": false,
 	"plugins": [
-    "prettier-plugin-organize-imports",
-    "prettier-plugin-tailwindcss"
+		"prettier-plugin-organize-imports",
+		"prettier-plugin-tailwindcss"
 	],
-	"tailwindConfig": "./web/tailwind.config.js"
+	"tailwindConfig": "./tailwind.config.js"
 }
