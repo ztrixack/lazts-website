@@ -1,32 +1,27 @@
 {{define "memo-group"}}
 <div class="container mx-auto mb-12 max-sm:p-6">
   <div class="flex flex-col items-center justify-center p-12 text-center">
-    <h1 class="text-3xl font-semibold text-slate-900 dark:text-slate-100">สมุดจดบันทึก</h1>
-    <p class="text-base text-slate-600 dark:text-slate-400">
-      เขียนเรื่องราวที่ผ่านเข้ามาในชีวิต จะถูกบ้าง ผิดบ้าง มั่วบ้าง ก็เนียนๆ เขียนๆ ไปก่อน
-    </p>
+    <h1 class="text-3xl font-semibold text-neutral-900 dark:text-neutral-100">สมุดจดบันทึก</h1>
+    <p class="text-base text-neutral-600 dark:text-neutral-400">เรื่องราวต่างๆ ที่ผ่านเข้ามาในชีวิต</p>
   </div>
 </div>
 
-
 <div class="container mx-auto max-w-screen-xl px-8 xl:px-5">
   <div class="my-16 flex items-center justify-center">
-    <h2 class="text-2xl text-slate-900 dark:text-slate-100 lg:text-4xl"><strong>หมวดหมู่</strong></h2>
+    <h2 class="text-2xl text-neutral-900 dark:text-neutral-100 lg:text-4xl"><strong>หมวดหมู่</strong></h2>
   </div>
 
-  <div class="grid grid-cols-1 gap-x-4 gap-y-8 sm:grid-cols-2 md:grid-cols-4 lg:grid-cols-6">
+  <div
+    class="grid grid-cols-1 gap-x-4 gap-y-8 sm:grid-cols-2 md:grid-cols-4 lg:grid-cols-6 p-8"
+    style="background-image: radial-gradient(circle, #000 1px, transparent 1px); background-size: 10px 10px"
+  >
     {{range .Groups}}
-    <a
-      class="group flex flex-col rounded bg-zinc-50 shadow hover:shadow-xl dark:-translate-y-1"
-      rel="noopener noreferrer"
-      href="{{.Link}}"
-      aria-label="{{.Name}}"
-    >
+    <a class="group flex flex-col" rel="noopener noreferrer" href="{{.Link}}" aria-label="{{.Name}}">
+      <div class="aspect-4/3 h-32 rounded-xl bg-zinc-50" style="background-color:"></div>
       <div class="flex flex-1 flex-col p-4">
-        <span class="text-xs tracking-wider text-orange-600 group-hover:underline"> {{.Link}} </span>
-        <h3 class="line-clamp-2 flex-1 py-2 font-medium leading-snug">{{.Name}}</h3>
-        <div class="flex flex-wrap justify-between space-x-2 pt-3 text-xs font-light text-slate-600">
-          <span>{{.Count}} articles</span>
+        <h3 class="line-clamp-2 text-lg capitalize tracking-wider text-neutral-700 dark:text-neutral-300">{{.Name}}</h3>
+        <div class="flex flex-wrap justify-between space-x-2 text-xs font-light text-neutral-500">
+          <span>{{.Count}} Articles</span>
         </div>
       </div>
     </a>

@@ -9,4 +9,15 @@ featured_image: https://picsum.photos/1024/768?random=8
 published_at: 2019-01-01
 published: true
 last_updated_at: 2024-05-23
+photos:
+  - https://picsum.photos/1024/768?random=21
+  - https://picsum.photos/1024/768?random=22
+  - https://picsum.photos/1024/768?random=23
+  - https://picsum.photos/1024/768?random=24
+  - https://picsum.photos/1024/768?random=25
+  - https://picsum.photos/1024/768?random=26
+info:
+  - test;info
+  - Date From;2023-10-12
+  - Date To;2023-10-22
 ---

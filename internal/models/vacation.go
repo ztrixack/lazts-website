@@ -2,6 +2,7 @@ package models
 
 import (
 	"path/filepath"
+	"strings"
 	"time"
 
 	"lazts/internal/utils"
@@ -10,16 +11,18 @@ import (
 )
 
 type VacationMetadata struct {
-	Title         string `json:"title"`
-	Slug          string `json:"slug"`
-	Excerpt       string `json:"excerpt"`
-	Location      string `json:"location"`
-	DateFrom      string `json:"date_from"`
-	DateTo        string `json:"date_to"`
-	FeaturedImage string `json:"featured_image"`
-	PublishedAt   string `json:"published_at"`
-	Published     bool   `json:"published"`
-	LastUpdatedAt string `json:"last_updated_at"`
+	Title         string   `json:"title"`
+	Slug          string   `json:"slug"`
+	Excerpt       string   `json:"excerpt"`
+	Location      string   `json:"location"`
+	DateFrom      string   `json:"date_from"`
+	DateTo        string   `json:"date_to"`
+	FeaturedImage string   `json:"featured_image"`
+	PublishedAt   string   `json:"published_at"`
+	Published     bool     `json:"published"`
+	LastUpdatedAt string   `json:"last_updated_at"`
+	Photos        []string `json:"photos"`
+	Info          []string `json:"info"`
 }
 
 type Vacation struct {
@@ -30,9 +33,11 @@ type Vacation struct {
 	DateTimeReadable string
 	FeaturedImage    string
 	Link             string
+	Photos           []string
+	Info             []Option
 }
 
-func (v VacationMetadata) ToHTML() Vacation {
+func (v VacationMetadata) ToVacation() Vacation {
 	from, err := time.Parse("2006-01-02", v.DateFrom)
 	if err != nil {
 		from = time.Now()
@@ -51,6 +56,8 @@ func (v VacationMetadata) ToHTML() Vacation {
 		DateTimeReadable: utils.ToYearMonthDayRange(from, to),
 		FeaturedImage:    utils.UpdateFeaturedImagePaths(filepath.Join("/static/contents/vacations", v.Slug), v.FeaturedImage),
 		Link:             filepath.Join("/vacations", v.Slug),
+		Photos:           v.Photos,
+		Info:             getInfo(v.Info),
 	}
 }
 
@@ -68,4 +75,21 @@ func (v VacationSort) Less(i, j int) bool {
 	}
 
 	return t1.After(t2) // Sort in descending order
+}
+
+func getInfo(info []string) []Option {
+	result := make([]Option, 0)
+	for _, i := range info {
+		data := strings.Split(i, ";")
+		if len(data) != 2 {
+			continue
+		}
+
+		result = append(result, Option{
+			Key:   data[0],
+			Value: data[1],
+		})
+	}
+
+	return result
 }

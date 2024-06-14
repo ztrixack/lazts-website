@@ -1,9 +1,9 @@
 {{define "memo-hero"}}
 <div class="container mx-auto space-y-8 p-6 my-80">
   <div class="space-y-2 text-center">
-    <h2 class="text-3xl font-bold tracking-tight text-slate-900 dark:text-slate-100">Blog & Memos</h2>
-    <p class="text-lg font-light leading-loose text-slate-600 dark:text-slate-400">
-      เขียนบันทึกไว้กันลืม แต่ก็ดันลืมว่าเคยเขียนไว้
+    <h2 class="text-3xl font-bold tracking-tight text-neutral-900 dark:text-neutral-100">Blog, Notes & Memos</h2>
+    <p class="text-lg font-light leading-loose text-neutral-600 dark:text-neutral-400">
+      บันทึกการเรียนรู้ และเขียนไร้สาระไปเรื่อย
     </p>
   </div>
   <div class="grid grid-cols-1 gap-x-4 gap-y-8 lg:grid-cols-2">{{range .Memos}} {{template "memo-card" .}} {{end}}</div>

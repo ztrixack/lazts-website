@@ -6,16 +6,16 @@
   </div>
   <div class="flex w-full flex-col bg-white md:w-2/3 p-4">
     <div class="item-center flex justify-between">
-      <p class="text-xs font-light text-slate-500">
+      <p class="text-xs font-light text-neutral-500">
         <time datetime="{{.DateTimeISO}}">{{.DateTimeReadable}}</time>
       </p>
       <div class="max-md:hidden">
         <span class="text-2xl">{{.Location}}</span>
       </div>
     </div>
-    <h3 class="text-xl font-semibold text-slate-800 line-clamp-1">{{.Title}}</h3>
+    <h3 class="text-xl font-semibold text-neutral-800 line-clamp-1">{{.Title}}</h3>
     <p
-      class="line-clamp-3 flex-1 overflow-clip text-ellipsis text-sm font-light tracking-wide text-slate-500 mt-4 mr-4">
+      class="line-clamp-3 flex-1 overflow-clip text-ellipsis text-sm font-light tracking-wide text-neutral-500 mt-4 mr-4">
       {{.Excerpt}}
     </p>
   </div>

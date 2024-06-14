@@ -25,7 +25,7 @@ func (h *handler) VacationsContents(w http.ResponseWriter, r *http.Request) {
 	data["Breadcrumbs"] = toVacationBreadcrumbs()
 
 	var buf bytes.Buffer
-	if err := h.webber.RenderMarkdown(&buf, "vacations-contents", params["content"], data); err != nil {
+	if err := h.webber.RenderVacationMarkdown(&buf, "vacations-contents", params["content"], data); err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}

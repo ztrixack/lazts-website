@@ -9,6 +9,17 @@ featured_image: https://picsum.photos/1024/768?random=17
 published_at: 2017-02-03
 published: true
 last_updated_at: 2024-05-23
+photos:
+  - https://picsum.photos/1024/768?random=21
+  - https://picsum.photos/1024/768?random=22
+  - https://picsum.photos/1024/768?random=23
+  - https://picsum.photos/1024/768?random=24
+  - https://picsum.photos/1024/768?random=25
+  - https://picsum.photos/1024/768?random=26
+info:
+  - test;info
+  - Date From;2023-10-12
+  - Date To;2023-10-22
 ---
 
 # เที่ยวญี่ปุ่นครั้งแรกที่ Tokyo

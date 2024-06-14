@@ -79,3 +79,8 @@
 .dark #toc-list a {
   color: rgb(203 213 225);
 }
+
+article table {
+  width: 100%;
+  overflow-x: scroll;
+}

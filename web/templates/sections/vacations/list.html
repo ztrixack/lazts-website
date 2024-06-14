@@ -1,7 +1,7 @@
 {{define "vacation-list"}}
 <div class="container mx-auto max-w-screen-xl px-8 py-5 lg:py-8 xl:px-5">
   <div class="my-16 flex items-center justify-center">
-    <h2 class="text-2xl text-slate-900 dark:text-slate-100 lg:text-4xl">ทริปล่าสุด</h2>
+    <h2 class="text-2xl text-neutral-900 dark:text-neutral-100 lg:text-4xl">ทริปทั้งหมด</h2>
   </div>
   <div class="my-16 grid grid-cols-1 gap-16 lg:grid-cols-2">{{range .Vacations}} {{template "vacation-card" .}} {{end}}</div>
 </div>

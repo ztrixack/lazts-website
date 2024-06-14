@@ -51,7 +51,7 @@ func (s *service) Get(location string) ([]models.Vacation, error) {
 		}
 
 		if location == "" || strings.EqualFold(vacation.Location, location) {
-			vacations = append(vacations, vacation.ToHTML())
+			vacations = append(vacations, vacation.ToVacation())
 		}
 	}
 
