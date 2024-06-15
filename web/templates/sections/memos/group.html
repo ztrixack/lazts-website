@@ -7,25 +7,29 @@
 </div>
 
 <div class="container mx-auto max-w-screen-xl px-8 xl:px-5">
-  <div class="my-16 flex items-center justify-center">
-    <h2 class="text-2xl text-neutral-900 dark:text-neutral-100 lg:text-4xl"><strong>หมวดหมู่</strong></h2>
-  </div>
-
   <div
-    class="grid grid-cols-1 gap-x-4 gap-y-8 sm:grid-cols-2 md:grid-cols-4 lg:grid-cols-6 p-8"
-    style="background-image: radial-gradient(circle, #000 1px, transparent 1px); background-size: 10px 10px"
-  >
+    class="grid grid-cols-1 md:grid-cols-2 lg:auto-cols-[minmax(0,15rem)] py-12 lg:grid-cols-4 xl:grid-cols-4 2xl:grid-cols-4 gap-2 col-span-4 text-neutral-700 dark:text-neutral-300 h-full">
     {{range .Groups}}
-    <a class="group flex flex-col" rel="noopener noreferrer" href="{{.Link}}" aria-label="{{.Name}}">
-      <div class="aspect-4/3 h-32 rounded-xl bg-zinc-50" style="background-color:"></div>
-      <div class="flex flex-1 flex-col p-4">
-        <h3 class="line-clamp-2 text-lg capitalize tracking-wider text-neutral-700 dark:text-neutral-300">{{.Name}}</h3>
-        <div class="flex flex-wrap justify-between space-x-2 text-xs font-light text-neutral-500">
-          <span>{{.Count}} Articles</span>
-        </div>
+    <a title="{{.Name}}" aria-label="{{.Name}}" href="{{.Link}}"
+      class="row-span-2 h-full flex flex-col justify-between">
+      <div
+        class="group flex w-full items-center justify-between space-x-3 ring-1 ring-neutral-200 hover:ring-neutral-800 ring-inset p-8 text-left focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2">
+        <span class="flex min-w-0 flex-1 items-center space-x-3">
+          <span class="block min-w-0 flex-1 text-sm *:block">
+            <span class="capitalize text-lg">{{.Name}}</span>
+            <span>{{.Count}} Articles</span>
+          </span>
+        </span>
       </div>
     </a>
     {{end}}
   </div>
 </div>
+
+<div class="star-field">
+  <div class="layer"></div>
+  <div class="layer"></div>
+  <div class="layer"></div>
+</div>
+
 {{end}}
