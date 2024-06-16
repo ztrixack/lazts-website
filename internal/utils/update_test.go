@@ -1,13 +1,50 @@
 package utils
 
 import (
+	"bytes"
 	"testing"
 
 	"github.com/stretchr/testify/assert"
 )
 
+func TestUpdateHTMLImagePaths(t *testing.T) {
+	tests := []struct {
+		input    string
+		prefix   string
+		expected string
+	}{
+		{
+			input:    `<div class="gallery"><img src="iceland/bollard-01.png" /><img src="iceland/bollard-02.png" /></div>`,
+			prefix:   "/static/contents/memos/20240616-geoguessr-on-the-road",
+			expected: `<div class="gallery"><img src="/static/contents/memos/20240616-geoguessr-on-the-road/iceland/bollard-01.png" /><img src="/static/contents/memos/20240616-geoguessr-on-the-road/iceland/bollard-02.png" /></div>`,
+		},
+		{
+			input:    `<img src="image.png" />`,
+			prefix:   "/static/images",
+			expected: `<img src="/static/images/image.png" />`,
+		},
+		{
+			input:    `<img src="/already/prefixed/image.png" />`,
+			prefix:   "/static/images",
+			expected: `<img src="/already/prefixed/image.png" />`,
+		},
+		{
+			input:    `<img src="http://example.com/image.png" />`,
+			prefix:   "/static/images",
+			expected: `<img src="http://example.com/image.png" />`,
+		},
+	}
+
+	for _, tt := range tests {
+		result := UpdateHTMLImagePaths([]byte(tt.input), tt.prefix)
+		if !bytes.Equal(result, []byte(tt.expected)) {
+			assert.Equal(t, tt.expected, string(result), "output should match expected")
+		}
+	}
+}
+
 func TestUpdateImagePaths(t *testing.T) {
-	testcases := []struct {
+	tests := []struct {
 		name     string
 		markdown string
 		expected string
@@ -44,16 +81,16 @@ func TestUpdateImagePaths(t *testing.T) {
 		},
 	}
 
-	for _, tc := range testcases {
-		t.Run(tc.name, func(t *testing.T) {
-			result := UpdateImagePaths([]byte(tc.markdown), "/new/path")
-			assert.Equal(t, tc.expected, string(result), "output should match expected")
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			result := UpdateImagePaths([]byte(tt.markdown), "/new/path")
+			assert.Equal(t, tt.expected, string(result), "output should match expected")
 		})
 	}
 }
 
 func TestUpdateFeaturedImagePaths(t *testing.T) {
-	testcases := []struct {
+	tests := []struct {
 		name     string
 		path     string
 		expected string
@@ -70,10 +107,10 @@ func TestUpdateFeaturedImagePaths(t *testing.T) {
 		},
 	}
 
-	for _, tc := range testcases {
-		t.Run(tc.name, func(t *testing.T) {
-			result := UpdateFeaturedImagePaths("/new/path", tc.path)
-			assert.Equal(t, tc.expected, result, "output should match expected")
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			result := UpdateFeaturedImagePaths("/new/path", tt.path)
+			assert.Equal(t, tt.expected, result, "output should match expected")
 		})
 	}
 }

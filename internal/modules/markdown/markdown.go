@@ -46,6 +46,7 @@ func (m *module) readFile(fullpath string) ([]byte, error) {
 	parts[0] = "/static"
 	parts[len(parts)-1] = ""
 
+	content = utils.UpdateHTMLImagePaths(content, filepath.Join(parts...))
 	content = utils.UpdateImagePaths(content, filepath.Join(parts...))
 	m.cache.Set(KEY, content)
 

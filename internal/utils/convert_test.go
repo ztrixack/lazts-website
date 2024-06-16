@@ -47,10 +47,10 @@ func TestConvertShowDate(t *testing.T) {
 		},
 	}
 
-	for _, tc := range tests {
-		t.Run(tc.name, func(t *testing.T) {
-			result := ToYearMonthDayRange(tc.from, tc.to)
-			assert.Equal(t, tc.expected, result)
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			result := ToYearMonthDayRange(tt.from, tt.to)
+			assert.Equal(t, tt.expected, result)
 		})
 	}
 }

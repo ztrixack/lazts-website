@@ -9,6 +9,28 @@ import (
 	"strings"
 )
 
+func UpdateHTMLImagePaths(markdownData []byte, prefixPath string) []byte {
+	re := regexp.MustCompile(`<img[^>]+src=["']([^"']+)["']`)
+
+	replaceFunc := func(match []byte) []byte {
+		parts := re.FindSubmatch(match)
+		if len(parts) < 2 {
+			return match
+		}
+		url := parts[1]
+
+		if bytes.HasPrefix(url, []byte("http://")) || bytes.HasPrefix(url, []byte("https://")) || bytes.HasPrefix(url, []byte("/")) {
+			return match
+		}
+
+		newURL := filepath.Join(prefixPath, string(url))
+
+		return bytes.Replace(match, url, []byte(newURL), 1)
+	}
+
+	return re.ReplaceAllFunc(markdownData, replaceFunc)
+}
+
 func UpdateImagePaths(markdownData []byte, prefixPath string) []byte {
 	re := regexp.MustCompile(`!\[([^\]]*)\]\(([^)]+)\)`)
 

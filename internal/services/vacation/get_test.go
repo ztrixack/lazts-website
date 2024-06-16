@@ -32,6 +32,7 @@ func TestGet(t *testing.T) {
 					DateTimeReadable: "วันอาทิตย์ที่ 1 มกราคม 2017",
 					FeaturedImage:    "/static/contents/vacations/slug-1/image.png",
 					Link:             "/vacations/slug-1",
+					Info:             []models.Option{},
 				},
 			},
 			setup: func(t *testing.T, mock *markdown.Mock) {
@@ -64,6 +65,7 @@ func TestGet(t *testing.T) {
 					DateTimeReadable: "วันอาทิตย์ที่ 1 มกราคม 2017",
 					FeaturedImage:    "/static/contents/vacations/slug-1/image.png",
 					Link:             "/vacations/slug-1",
+					Info:             []models.Option{},
 				},
 			},
 			setup: func(t *testing.T, mock *markdown.Mock) {

@@ -84,3 +84,7 @@ article table {
   width: 100%;
   overflow-x: scroll;
 }
+
+.gallery img {
+  border-width: 0;
+}

@@ -18,12 +18,12 @@ func TestCache_Set(t *testing.T) {
 		{"key2", "value2"},
 	}
 
-	for _, tc := range tests {
-		m.Set(tc.key, tc.value)
+	for _, tt := range tests {
+		m.Set(tt.key, tt.value)
 		m.mu.RLock()
-		item, found := m.data[tc.key]
+		item, found := m.data[tt.key]
 		m.mu.RUnlock()
 		assert.True(t, found)
-		assert.Equal(t, tc.value, item.Value)
+		assert.Equal(t, tt.value, item.Value)
 	}
 }

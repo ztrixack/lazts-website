@@ -7,7 +7,7 @@ import (
 )
 
 func TestRandomizeBlackholes(t *testing.T) {
-	testCases := []struct {
+	tests := []struct {
 		name      string
 		count     int
 		expectLen int
@@ -17,10 +17,10 @@ func TestRandomizeBlackholes(t *testing.T) {
 		{name: "Negative count", count: -5, expectLen: 0},
 	}
 
-	for _, tc := range testCases {
-		t.Run(tc.name, func(t *testing.T) {
-			blackholes := RandomizeBlackholes(tc.count)
-			assert.Equal(t, tc.expectLen, len(blackholes), "The number of blackholes generated should match the expected count")
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			blackholes := RandomizeBlackholes(tt.count)
+			assert.Equal(t, tt.expectLen, len(blackholes), "The number of blackholes generated should match the expected count")
 
 			for _, bh := range blackholes {
 				assert.True(t, bh.Size >= 180 && bh.Size <= 540, "Size should be within the range 180 to 540")
@@ -33,7 +33,7 @@ func TestRandomizeBlackholes(t *testing.T) {
 }
 
 func TestRandomizeClouds(t *testing.T) {
-	testCases := []struct {
+	tests := []struct {
 		name      string
 		count     int
 		expectLen int
@@ -43,10 +43,10 @@ func TestRandomizeClouds(t *testing.T) {
 		{name: "Negative count", count: -5, expectLen: 0},
 	}
 
-	for _, tc := range testCases {
-		t.Run(tc.name, func(t *testing.T) {
-			clouds := RandomizeClouds(tc.count)
-			assert.Equal(t, tc.expectLen, len(clouds), "The number of clouds generated should match the expected count")
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			clouds := RandomizeClouds(tt.count)
+			assert.Equal(t, tt.expectLen, len(clouds), "The number of clouds generated should match the expected count")
 
 			for _, c := range clouds {
 				assert.True(t, c.Top >= -50 && c.Top < 100, "Top should be within the range -50 to 99")

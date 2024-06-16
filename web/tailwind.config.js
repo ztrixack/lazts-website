@@ -4,7 +4,7 @@ const plugin = require('tailwindcss/plugin')
 module.exports = {
   mode: 'jit',
   darkMode: "class",
-  content: ["./templates/**/*.html", "./static/js/**/*.js"],
+  content: ["./templates/**/*.html", "./static/js/**/*.js", "./contents/**/*.md"],
   theme: {
     extend: {
       aspectRatio: {

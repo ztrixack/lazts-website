@@ -5,7 +5,7 @@ excerpt: มารู้จักกับ Unit Testing สำหรับภา
 featured_image: https://picsum.photos/1024/768?random=12
 published_at: 2024-05-14
 last_updated_at: 2024-05-20
-published: false
+published: true
 tags:
   - embedded
   - testing
